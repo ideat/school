@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "mindware.com.mapper.StudentMapper">
+
+    <resultMap type="student" id="StudentResult">
+        <id 	property="studentId" column="student_id"/>
+        <result property="classPeriodId" column="class_period_id"/>
+        <result property="typeFeeId" column="type_fee_id"/>
+        <result property="nameStudent" column="name_student"/>
+        <result property="lastNameStudent" column="last_name_fee"/>
+        <result property="parents" column="parents"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="cellNumber" column="cell_number"/>
+        <result property="address" column="address"/>
+        <result property="registrationDate" column="registration_date"/>
+        <result property="bornDate" column="born_date"/>
+        <result property="retirementDate" column="retirement_date"/>
+        <result property="classRoom" column="class_room"/>
+
+        <association property="typeFee"  column="type_fee_id" javaType="typefee" resultMap="TypeFeeResult" />
+        <association property="classPeriod"  column="class_period_id" javaType="classperiod" resultMap="ClassPeriodResult" />
+    </resultMap>
+
+    <resultMap type="classperiod" id="ClassPeriodResult">
+        <id 	property="classPeriodId" column="class_period_id"/>
+        <result property="year" column="year"/>
+        <result property="state" column="state"/>
+    </resultMap>
+
+    <resultMap type="typefee" id="TypeFeeResult">
+        <id 	property="typeFeeId" column="type_fee_id"/>
+        <result property="classPeriodId" column="class_period_id"/>
+        <result property="mountFee" column="mount_fee"/>
+        <result property="nameFee" column="name_fee"/>
+        <result property="discountPercentaje" column="discount_percentaje"/>
+    </resultMap>
+
+
+
+    <select id="findStudentByPeriod" resultMap="StudentResult" parameterType="string">
+        select *
+        from student s
+        inner joint class_period cp on (s.class_period_id = cp.class_period_id)
+        where cp.year = #{year}
+        order by s.class_room, s.last_name_student, s.name_student
+    </select>
+
+    <select id="findStudentRetired" resultMap="StudentResult" parameterType="string">
+        select *
+        from student s
+        inner joint class_period cp on (s.class_period_id = cp.class_period_id)
+        where cp.year = #{year}
+        and s.retirement_date is not null
+        order by s.class_room, s.last_name_student, s.name_student, s.retirement_date
+
+    </select>
+
+    <insert id="insertStudent"  parameterType="student" keyProperty="studentId" >
+        <selectKey keyProperty="studentId" resultType="int" order="BEFORE">
+            select nextval('student_id_seq')
+        </selectKey>
+        insert into student (
+        student_id,
+        class_period_id,
+        type_fee_id,
+        name_student,
+        last_name_student,
+        parents,
+        phone_number,
+        cell_number,
+        address,
+        registration_date,
+        born_date,
+        retirement_date,
+        class_room)
+        values (
+        #{studentId},
+        #{classPeriodId},
+        #{typeFeeId},
+        #{nameStudent},
+        #{lastNameStudent},
+        #{parents},
+        #{phoneNumber},
+        #{cellNumber},
+        #{address},
+        #{registrationDate},
+        #{born_date},
+        #{retirament_date},
+        #{classRoom})
+    </insert>
+
+    <update id="updateStudent" parameterType="student">
+        update student
+        set
+        type_fee_id = #{typeFeeId},
+        name_student = #{nameStudent},
+        last_name_student = #{lastNameStudent},
+        parents = #{parents},
+        phone_number = #{phoneNumber},
+        cell_number = #{cellNumber},
+        address = #{address},
+        registration_date = #{registrationDate},
+        born_date = #{bornDate},
+        retirement_date = #{retirementDate},
+        class_room = #{classRoom}
+        where student_id = #{student}
+
+    </update>
+
+</mapper>

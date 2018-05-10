@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "mindware.com.mapper.ClassPeriodMapper">
+
+    <resultMap type="classperiod" id="ClassPeriodResult">
+        <id 	property="classPeriodId" column="class_period_id"/>
+        <result property="year" column="year"/>
+        <result property="state" column="state"/>
+
+    </resultMap>
+
+    <select id="findAllClassPeriod" resultMap="ClassPeriodResult">
+        select * from class_period c
+        order by c.year
+    </select>
+
+    <select id="getCountClassPeriodByYear" resultType="int" parameterType="string">
+        select count(*) from class_period c
+        where c.year = #{year}
+    </select>
+
+    <select id="findClassPeriodByState" resultMap="ClassPeriodResult" parameterType="string">
+        select * from class_period c
+        where state = #{state}
+    </select>
+
+    <insert id="insertClassPeriod"  parameterType="classperiod" keyProperty="classPeriodId" >
+        <selectKey keyProperty="classPeriodId" resultType="int" order="BEFORE">
+            select nextval('class_period_id_seq')
+        </selectKey>
+        insert into class_period (
+        class_period_id,
+        year,
+        state)
+        values (
+        #{classPeriodId},
+        #{year},
+        #{state})
+    </insert>
+
+    <update id="updateClassPeriod" parameterType="classperiod">
+        update class_period
+        set
+        state = #{state}
+        where class_period_id = #{classPeriodId}
+
+    </update>
+
+
+
+</mapper>

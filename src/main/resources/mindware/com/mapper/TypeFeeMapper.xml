@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "mindware.com.mapper.TypeFeeMapper">
+
+    <resultMap type="typefee" id="TypeFeeResult">
+        <id 	property="typeFeeId" column="type_fee_id"/>
+        <result property="classPeriodId" column="class_period_id"/>
+        <result property="mountFee" column="mount_fee"/>
+        <result property="nameFee" column="name_fee"/>
+        <result property="discountPercentaje" column="discount_percentaje"/>
+        <association property="classPeriod"  column="class_period_id" javaType="classperiod" resultMap="ClassPeriodResult" />
+    </resultMap>
+
+    <resultMap type="classperiod" id="ClassPeriodResult">
+    <id 	property="classPeriodId" column="class_period_id"/>
+    <result property="year" column="year"/>
+    <result property="state" column="state"/>
+
+    </resultMap>
+
+
+    <select id="findAllTypeFee" resultMap="TypeFeeResult">
+        select *
+        from type_fee
+        order by name_fee
+    </select>
+
+    <select id="findTypeFeeByClassPeriodYear" resultMap="TypeFeeResult" parameterType="string">
+        select *
+        from type_fee tf
+        inner join class_period cp on (tf.class_period_id = cp.class_period_id)
+        where cp.year = #{year}
+
+    </select>
+
+    <insert id="insertTypeFee"  parameterType="typefee" keyProperty="typeFeeId" >
+        <selectKey keyProperty="typeFeeId" resultType="int" order="BEFORE">
+            select nextval('type_fee_id_seq')
+        </selectKey>
+        insert into type_fee (
+        type_fee_id,
+        class_period_id,
+        mount_fee,
+        name_fee,
+        discount_percentaje)
+        values (
+        #{typeFeeId},
+        #{classPeriodId},
+        #{mountFee},
+        #{nameFee},
+        #{discountPercentaje})
+    </insert>
+
+    <update id="updateTypeFee" parameterType="typefee">
+        update type_fee
+        set
+        class_period_id = #{classPeriodId},
+        mount_fee = #{mountFee},
+        name_fee = #{nameFee},
+        discount_percentaje = #{discountPercentaje}
+        where type_fee_id = #{typeFeeId}
+
+    </update>
+
+</mapper>
