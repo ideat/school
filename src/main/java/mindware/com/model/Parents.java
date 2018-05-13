@@ -1,6 +1,7 @@
 package mindware.com.model;
 
 public class Parents {
+    private Integer parentId;
     private String nameParent;
     private String lastNameParent;
     private String phoneNumberParent;
@@ -9,6 +10,14 @@ public class Parents {
     private String addressParent;
     private String bornDateParent;
     private String typeRelationShip;
+
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
+    }
 
     public String getNameParent() {
         return nameParent;

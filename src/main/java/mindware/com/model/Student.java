@@ -8,12 +8,12 @@ public class Student {
     private Integer typeFeeId;
     private String nameStudent;
     private String lastNameStudent;
-    private String parants;
+    private String parents;
     private String phoneNumber;
     private String address;
     private Date registrationDate;
     private Date bornDate;
-    private Date retirement;
+    private Date retirementDate;
     private String classRoom;
     private String cellNumber;
     private ClassPeriod classPeriod;
@@ -83,12 +83,12 @@ public class Student {
         this.lastNameStudent = lastNameStudent;
     }
 
-    public String getParants() {
-        return parants;
+    public String getParents() {
+        return parents;
     }
 
-    public void setParants(String parants) {
-        this.parants = parants;
+    public void setParents(String parents) {
+        this.parents = parents;
     }
 
     public String getPhoneNumber() {
@@ -123,12 +123,12 @@ public class Student {
         this.bornDate = bornDate;
     }
 
-    public Date getRetirement() {
-        return retirement;
+    public Date getRetirementDate() {
+        return retirementDate;
     }
 
-    public void setRetirement(Date retirement) {
-        this.retirement = retirement;
+    public void setRetirementDate(Date retirementDate) {
+        this.retirementDate = retirementDate;
     }
 
     public String getClassRoom() {

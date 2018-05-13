@@ -4,12 +4,37 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 public class Util {
+
+    public Date localDateToDate(LocalDate localDate){
+        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return date;
+    }
+
+    public LocalDate dateToLocalDate(Date dateToConvert) {
+        return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
+    }
+
+    public String localDateToString(LocalDate localDate){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(localDateToDate(localDate));
+        Integer year = calendar.get(calendar.YEAR) ;
+        Integer month = calendar.get(calendar.MONTH)+1;
+        Integer day = calendar.get(calendar.DAY_OF_MONTH);
+        String monthString;
+        if (month<10) monthString = '0' + month.toString();
+        else monthString = month.toString();
+
+        return day.toString()+'-'+monthString+'-'+year.toString();
+
+    }
+
     public Date stringToDate(String date, String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.ENGLISH); //
         Date fecha = new Date();
