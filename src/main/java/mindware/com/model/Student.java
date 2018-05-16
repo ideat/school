@@ -16,8 +16,17 @@ public class Student {
     private Date retirementDate;
     private String classRoom;
     private String cellNumber;
+    private String courseLevel;
     private ClassPeriod classPeriod;
     private TypeFee typeFee;
+
+    public String getCourseLevel() {
+        return courseLevel;
+    }
+
+    public void setCourseLevel(String courseLevel) {
+        this.courseLevel = courseLevel;
+    }
 
     public ClassPeriod getClassPeriod() {
         return classPeriod;

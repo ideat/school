@@ -127,7 +127,7 @@ public class TypeFeeForm extends CustomComponent implements View {
     private TypeFee prepareTypeFee(){
         TypeFee typeFee = new TypeFee();
         typeFee.setClassPeriodId(cmbClassPeriod.getValue().getClassPeriodId());
-        typeFee.setMountFee(txtMountFee.getDoubleValueDoNotThrow());
+        typeFee.setMountFee(Double.parseDouble(txtMountFee.getValue()));
         typeFee.setDiscountPercentaje(txtDiscountPercentaje.getDoubleValueDoNotThrow());
         typeFee.setNameFee(txtNameTypeFee.getValue());
         return typeFee;
@@ -162,6 +162,7 @@ public class TypeFeeForm extends CustomComponent implements View {
         txtMountFee = new NumberField("Monto cuota");
         txtMountFee.setStyleName(ValoTheme.TEXTFIELD_TINY);
         txtMountFee.setDecimalPrecision(2);
+        txtMountFee.setDecimalSeparator('.');
         txtMountFee.setNegativeAllowed(false);
         txtMountFee.setErrorText("Monto invalido");
         txtMountFee.setMinValue(0.0);
@@ -170,6 +171,7 @@ public class TypeFeeForm extends CustomComponent implements View {
         txtDiscountPercentaje = new NumberField("Porcentaje descuento");
         txtDiscountPercentaje.setStyleName(ValoTheme.TEXTFIELD_TINY);
         txtDiscountPercentaje.setDecimalPrecision(2);
+        txtDiscountPercentaje.setDecimalSeparator('.');
         txtDiscountPercentaje.setNegativeAllowed(false);
         txtDiscountPercentaje.setMinValue(0.0);
         txtDiscountPercentaje.setMaxValue(100.0);

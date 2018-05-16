@@ -1,7 +1,5 @@
 package mindware.com.view;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vaadin.icons.VaadinIcons;
@@ -41,7 +39,7 @@ public class StudentForm extends CustomComponent implements View {
     private DateField dfRegistrationDate;
     private DateField dfBornDate;
     private DateField dfRetirementDate;
-    private TextField txtClassRoom;
+    private ComboBox cmbCourseLevel;
     private Grid<Parents> gridParents;
     private TextField txtParentId;
     private TextField txtNameParent;
@@ -60,6 +58,7 @@ public class StudentForm extends CustomComponent implements View {
     private StudentService studentService;
     private List<Parents> parentsList;
     private GridCellFilter<Student> filterStudent;
+    private String yearGlobal;
 
     public StudentForm(){
         Panel panelMain = new Panel();
@@ -70,7 +69,8 @@ public class StudentForm extends CustomComponent implements View {
 
         setCompositionRoot(panelMain);
         ClassPeriodService classPeriodService = new ClassPeriodService();
-        fillStudentsPerido(classPeriodService.findClassPeriodByState("ACTIVO").get(0).getYear());
+        yearGlobal = classPeriodService.findClassPeriodByState("ACTIVO").get(0).getYear();
+        fillStudentsPerido(yearGlobal);
         headerGridParent();
         fillCombos();
         postBuild();
@@ -124,7 +124,7 @@ public class StudentForm extends CustomComponent implements View {
             }
             headerGridParent();
             gridParents.setItems(parentsList);
-            clearFieldsParent();
+            txtParentId.clear();
 
         });
     }
@@ -140,7 +140,7 @@ public class StudentForm extends CustomComponent implements View {
         txtAddress.clear();
         dfRegistrationDate.clear();
         dfBornDate.clear();
-        txtClassRoom.clear();
+        cmbCourseLevel.clear();
     }
 
     private void clearFieldsParent(){
@@ -177,7 +177,7 @@ public class StudentForm extends CustomComponent implements View {
         txtAddress.setValue(student.getAddress());
         dfRegistrationDate.setValue(new Util().dateToLocalDate(student.getRegistrationDate()));
         dfBornDate.setValue(new Util().dateToLocalDate(student.getBornDate()));
-        txtClassRoom.setValue(student.getClassRoom());
+        cmbCourseLevel.setValue(student.getClassRoom());
         cmbClassPeriod.setValue(student.getClassPeriod());
         cmbTypeFee.setValue(student.getTypeFee());
 
@@ -201,18 +201,21 @@ public class StudentForm extends CustomComponent implements View {
 
     private void filterGridStudent(final Grid grid){
         this.filterStudent = new GridCellFilter(grid);
-        this.filterStudent.setDateFilter("bornDate",  new SimpleDateFormat("dd-MM-yyyy"),true);
-        this.filterStudent.setDateFilter("registrationDate",  new SimpleDateFormat("dd-MM-yyyy"),true);
-        this.filterStudent.setTextFilter("nameStudent", true,false);
-        this.filterStudent.setTextFilter("lastNameStudent", true,false);
-        this.filterStudent.setTextFilter("classRoom", true,false);
+        this.filterStudent.setDateFilter("bornDate", new SimpleDateFormat("dd-MM-yyyy"), true);
+        this.filterStudent.setDateFilter("registrationDate", new SimpleDateFormat("dd-MM-yyyy"), true);
+        this.filterStudent.setTextFilter("nameStudent", true, false);
+        this.filterStudent.setTextFilter("lastNameStudent", true, false);
+        this.filterStudent.setTextFilter("courseLevel", true, false);
     }
 
     private void headerGridStudent(){
         gridStudent.removeAllColumns();
+        if(gridStudent.getHeaderRowCount()>1)
+            gridStudent.removeHeaderRow(1);
         gridStudent.addColumn(Student::getStudentId).setCaption("ID").setId("studentId");
         gridStudent.addColumn(Student::getLastNameStudent).setCaption("Apellidos").setId("lastNameStudent");
         gridStudent.addColumn(Student::getNameStudent).setCaption("Nombres").setId("nameStudent");
+        gridStudent.addColumn(Student::getCourseLevel).setCaption("Nivel").setId("courseLevel");
         gridStudent.addColumn(Student::getPhoneNumber).setCaption("Telf. domicilio").setId("phoneNumber");
         gridStudent.addColumn(Student::getCellNumber).setCaption("Celular").setId("cellNumber");
         gridStudent.addColumn(Student::getAddress).setCaption("Dirección").setId("address");
@@ -220,7 +223,6 @@ public class StudentForm extends CustomComponent implements View {
         gridStudent.addColumn(Student::getBornDate).setCaption("Fecha nacimiento").setId("bornDate").setRenderer(new DateRenderer(("%1$td-%1$tm-%1$tY")));
         gridStudent.addColumn(Student::getClassPeriodId).setCaption("Gestión").setId("classPeriodId");
         gridStudent.addColumn(Student::getTypeFeeId).setCaption("Tipo cuota").setId("typeFeeId");
-        gridStudent.addColumn(Student::getClassRoom).setCaption("Aula").setId("classRoom");
 
     }
 
@@ -269,24 +271,26 @@ public class StudentForm extends CustomComponent implements View {
 
                     student.setParents(dataParentsToJsonString());
                     studentService.insertStudent(student);
+                    fillStudentsPerido(yearGlobal);
                     Notification.show("Estudiante",
                             " Se registraron los datos ",
                             Notification.Type.HUMANIZED_MESSAGE);
                 }
             }else {
 
-                ObjectMapper mapper = new ObjectMapper();
-                String jsonParents = null;
-                try {
-                    jsonParents = mapper.writeValueAsString(parentsList);
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
+//                ObjectMapper mapper = new ObjectMapper();
+//                String jsonParents = null;
+//                try {
+//                    jsonParents = mapper.writeValueAsString(parentsList);
+//                } catch (JsonProcessingException e) {
+//                    e.printStackTrace();
+//                }
                 Student student = prepareDataStudent();
-//                student.setParents(dataParentsToJsonString());
-                student.setParents(jsonParents);
+                student.setParents(dataParentsToJsonString());
+//                student.setParents(jsonParents);
                 student.setStudentId(Integer.parseInt(txtStudentId.getValue()));
                 studentService.updateStudent(student);
+                fillStudentsPerido(yearGlobal);
                 Notification.show("Estudiante",
                         " Datos actualizados ",
                         Notification.Type.HUMANIZED_MESSAGE);
@@ -308,7 +312,7 @@ public class StudentForm extends CustomComponent implements View {
         student.setAddress(txtAddress.getValue());
         student.setRegistrationDate(new Util().localDateToDate(dfRegistrationDate.getValue()));
         student.setBornDate(new Util().localDateToDate(dfBornDate.getValue()));
-        student.setClassRoom(txtClassRoom.getValue());
+        student.setCourseLevel(cmbCourseLevel.getValue().toString());
         student.setClassPeriodId(cmbClassPeriod.getValue().getClassPeriodId());
         student.setTypeFeeId(cmbTypeFee.getValue().getTypeFeeId());
 
@@ -328,7 +332,7 @@ public class StudentForm extends CustomComponent implements View {
         if (txtAddress.isEmpty()) return false;
         if (dfRegistrationDate.isEmpty()) return false;
         if (dfBornDate.isEmpty()) return false;
-        if (txtClassRoom.isEmpty()) return false;
+        if (cmbCourseLevel.isEmpty()) return false;
 
         return true;
     }
@@ -359,7 +363,7 @@ public class StudentForm extends CustomComponent implements View {
 
     private TabSheet buildMainTabSheet(){
         mainTabSheet = new TabSheet();
-        mainTabSheet.setStyleName(ValoTheme.TABSHEET_FRAMED);
+        mainTabSheet.setStyleName(ValoTheme.TABSHEET_PADDED_TABBAR);
 
         mainTabSheet.addTab(buildGridMainLayoutStudent(),"Estudiantes");
         mainTabSheet.addTab(buildGridMainLayoutParents(),"Padres/Apoderados");
@@ -408,9 +412,9 @@ public class StudentForm extends CustomComponent implements View {
         dfRegistrationDate.setStyleName(ValoTheme.DATEFIELD_TINY);
         gridMainLayoutStudent.addComponent(dfRegistrationDate,1,2);
 
-        txtClassRoom = new TextField("Aula");
-        txtClassRoom.setStyleName(ValoTheme.TEXTFIELD_TINY);
-        gridMainLayoutStudent.addComponent(txtClassRoom,2,2);
+        cmbCourseLevel = new ComboBox("Nivel");
+        cmbCourseLevel.setStyleName(ValoTheme.TEXTFIELD_TINY);
+        gridMainLayoutStudent.addComponent(cmbCourseLevel,2,2);
 
         cmbClassPeriod = new ComboBox<>("Gestión");
         cmbClassPeriod.setStyleName(ValoTheme.COMBOBOX_TINY);
@@ -444,10 +448,12 @@ public class StudentForm extends CustomComponent implements View {
     private Panel buildPanelGridStudent(){
         Panel panelGridStudent = new Panel();
         panelGridStudent.setStyleName(ValoTheme.PANEL_WELL);
+        panelGridStudent.setHeight("320px");
 //        panelGridStudent.setSizeFull();
         gridStudent = new Grid<>(Student.class);
         gridStudent.setStyleName(ValoTheme.TABLE_COMPACT);
         gridStudent.setWidth("100%");
+        gridStudent.setHeight("320px");
         panelGridStudent.setContent(gridStudent);
         return panelGridStudent;
     }
@@ -522,11 +528,12 @@ public class StudentForm extends CustomComponent implements View {
     private Panel buildPanelGridParents(){
         Panel panelGridParents = new Panel();
         panelGridParents.setStyleName(ValoTheme.PANEL_WELL);
-        panelGridParents.setSizeFull();
-
+        panelGridParents.setWidth("100%");
+        panelGridParents.setHeight("320px");
         gridParents = new Grid<>();
         gridParents.setStyleName(ValoTheme.TABLE_SMALL);
         gridParents.setWidth("100%");
+        gridParents.setHeight("320px");
         panelGridParents.setContent(gridParents);
 
         return panelGridParents;

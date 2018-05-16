@@ -183,7 +183,7 @@ public class MyUI extends UI  implements ClientConnector.DetachListener {
 
         if (Arrays.asList(listOptions).contains("0")) {
             MenuButton importDataButton = LeftMenuButtonBuilder.get()
-                    .withCaption("Gestion periodos")
+                    .withCaption("Gestión periodos")
                     .withIcon(VaadinIcons.CALENDAR)
                     .withNavigateTo(ClassPeriodForm.class)
                     .build();

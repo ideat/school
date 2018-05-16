@@ -10,6 +10,7 @@
         <result property="typeParameter" column="type_parameter"/>
         <result property="descriptionParameter" column="description_parameter"/>
         <result property="valueParameter" column="value_parameter"/>
+        <result property="state" column="state"/>
     </resultMap>
 
     <select id="findParameterByType" resultMap="ParameterResult" parameterType="string">
@@ -17,7 +18,14 @@
         from parameter
         where type_parameter = #{typeParameter}
         order by parameter_id
+    </select>
 
+    <select id="findParameterByTypeAndState" resultMap="ParameterResult" parameterType="map">
+        select *
+        from parameter
+        where type_parameter = #{typeParameter}
+        and state =#{state}
+        order by parameter_id
     </select>
 
     <select id="findParameterByNameAndType" resultType="int" parameterType="map">
@@ -36,12 +44,14 @@
         parameter_id,
         type_parameter,
         description_parameter,
-        value_parameter)
+        value_parameter,
+        state)
         values (
         #{parameterId},
         #{typeParameter},
         #{descriptionParameter},
-        #{valueParameter}
+        #{valueParameter},
+        #{state}
         )
 
     </insert>
@@ -51,7 +61,8 @@
         set
         type_parameter = #{typeParameter},
         description_parameter = #{descriptionParameter},
-        value_parameter = #{valueParameter}
+        value_parameter = #{valueParameter},
+        state =#{state}
         where parameter_id = #{parameterId}
     </update>
 

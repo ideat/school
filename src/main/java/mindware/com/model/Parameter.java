@@ -5,6 +5,15 @@ public class Parameter {
     private String typeParameter;
     private String descriptionParameter;
     private String valueParameter;
+    private String state;
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
 
     public Integer getParameterId() {
         return parameterId;

@@ -3,22 +3,40 @@ package mindware.com.model;
 import java.util.Date;
 
 public class Payments {
-    private Integer paymentsId;
+    private Integer paymentId;
     private Integer studentId;
     private Date paymentDate;
     private Double paymentMount;
     private String description;
     private String paymentConcept;
     private String paymentType;
-    private String invoicePayment;
+    private String invoiceNumber;
     private Integer userId;
+    private String courseLevel;
+    private String fullNameStudent;
 
-    public Integer getPaymentsId() {
-        return paymentsId;
+    public String getFullNameStudent() {
+        return fullNameStudent;
     }
 
-    public void setPaymentsId(Integer paymentsId) {
-        this.paymentsId = paymentsId;
+    public void setFullNameStudent(String fullNameStudent) {
+        this.fullNameStudent = fullNameStudent;
+    }
+
+    public String getCourseLevel() {
+        return courseLevel;
+    }
+
+    public void setCourseLevel(String courseLevel) {
+        this.courseLevel = courseLevel;
+    }
+
+    public Integer getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(Integer paymentId) {
+        this.paymentId = paymentId;
     }
 
     public Integer getStudentId() {
@@ -69,12 +87,12 @@ public class Payments {
         this.paymentType = paymentType;
     }
 
-    public String getInvoicePayment() {
-        return invoicePayment;
+    public String getInvoiceNumber() {
+        return invoiceNumber;
     }
 
-    public void setInvoicePayment(String invoicePayment) {
-        this.invoicePayment = invoicePayment;
+    public void setInvoiceNumber(String invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
     }
 
     public Integer getUserId() {

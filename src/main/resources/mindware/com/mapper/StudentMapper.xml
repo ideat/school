@@ -19,6 +19,7 @@
         <result property="bornDate" column="born_date"/>
         <result property="retirementDate" column="retirement_date"/>
         <result property="classRoom" column="classroom"/>
+        <result property="courseLevel" column="course_level"/>
 
         <association property="typeFee"  column="type_fee_id" javaType="typefee" resultMap="TypeFeeResult" />
         <association property="classPeriod"  column="class_period_id" javaType="classperiod" resultMap="ClassPeriodResult" />
@@ -76,7 +77,8 @@
         registration_date,
         born_date,
         retirement_date,
-        classroom)
+        classroom,
+        course_level)
         values (
         #{studentId},
         #{classPeriodId},
@@ -90,7 +92,8 @@
         #{registrationDate},
         #{bornDate},
         #{retirementDate},
-        #{classRoom})
+        #{classRoom},
+        #{courseLevel})
     </insert>
 
     <update id="updateStudent" parameterType="student">
@@ -105,7 +108,8 @@
         registration_date = #{registrationDate},
         born_date = #{bornDate},
         parents = #{parents}::json,
-        classroom = #{classRoom}
+        classroom = #{classRoom},
+        course_level = #{courseLevel}
 
         where student_id = #{studentId}
 
