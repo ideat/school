@@ -5,9 +5,9 @@ import java.util.Date;
 public class PaymentPlan {
     private Integer paymentPlantId;
     private Integer studentId;
-    private Integer paymentNumer;
-    private Double paymentAmount;
-    private Date paymentDate;
+    private Integer paymentPlanNumer;
+    private Double paymentPlanAmount;
+    private Date paymentPlanDate;
 
     public Integer getPaymentPlantId() {
         return paymentPlantId;
@@ -25,27 +25,27 @@ public class PaymentPlan {
         this.studentId = studentId;
     }
 
-    public Integer getPaymentNumer() {
-        return paymentNumer;
+    public Integer getPaymentPlanNumer() {
+        return paymentPlanNumer;
     }
 
-    public void setPaymentNumer(Integer paymentNumer) {
-        this.paymentNumer = paymentNumer;
+    public void setPaymentPlanNumer(Integer paymentPlanNumer) {
+        this.paymentPlanNumer = paymentPlanNumer;
     }
 
-    public Double getPaymentAmount() {
-        return paymentAmount;
+    public Double getPaymentPlanAmount() {
+        return paymentPlanAmount;
     }
 
-    public void setPaymentAmount(Double paymentAmount) {
-        this.paymentAmount = paymentAmount;
+    public void setPaymentPlanAmount(Double paymentPlanAmount) {
+        this.paymentPlanAmount = paymentPlanAmount;
     }
 
-    public Date getPaymentDate() {
-        return paymentDate;
+    public Date getPaymentPlanDate() {
+        return paymentPlanDate;
     }
 
-    public void setPaymentDate(Date paymentDate) {
-        this.paymentDate = paymentDate;
+    public void setPaymentPlanDate(Date paymentPlanDate) {
+        this.paymentPlanDate = paymentPlanDate;
     }
 }

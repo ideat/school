@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -11,6 +12,26 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Util {
+
+    public Date dateWithFixedDayAndIncMonth(int fixedDay, LocalDate date, int incMonth){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(localDateToDate(date));
+        calendar.add(Calendar.MONTH,incMonth);
+
+        int year = calendar.get(calendar.YEAR) ;
+        int month = calendar.get(calendar.MONTH);
+        int day = fixedDay;
+
+        calendar.set(year,month,day);
+        return calendar.getTime();
+    }
+
+    public static int monthsBetweenIgnoreDays(LocalDate start, LocalDate end) {
+        start = start.withDayOfMonth(1);
+        end = end.withDayOfMonth(1);
+        Period diff = Period.between(start, end);
+        return diff.getMonths();
+    }
 
     public Date localDateToDate(LocalDate localDate){
         Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());

@@ -37,8 +37,19 @@ public class PaymentFeeForm extends CustomComponent implements View {
     }
 
     private void insertPayments(){
-        PaymentsService paymentsService = new PaymentsService();
-        paymentsService.insertPayments(paymentsList);
+        try {
+            PaymentsService paymentsService = new PaymentsService();
+            paymentsService.insertPayments(paymentsList);
+            Notification.show("PAGOS",
+                    "Pagos importados correctamente: ",
+                    Notification.Type.HUMANIZED_MESSAGE);
+            gridPaymentFee = null;
+
+        }catch (Exception e){
+            Notification.show("ERROR",
+                    "Importando pagos: "+ e.getMessage(),
+                    Notification.Type.ERROR_MESSAGE);
+        }
     }
 
     private void fillGridPayments(List<Payments> paymentsList){

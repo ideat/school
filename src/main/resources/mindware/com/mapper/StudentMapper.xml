@@ -60,6 +60,15 @@
 
     </select>
 
+    <select id="findStudentById" resultMap="StudentResult" parameterType="int">
+        select *
+        from student s
+        inner join class_period cp on (s.class_period_id = cp.class_period_id)
+        inner join type_fee tf on (s.type_fee_id = tf.type_fee_id)
+        where s.student_id = #{studentId}
+
+    </select>
+
     <insert id="insertStudent"  parameterType="student" keyProperty="studentId" >
         <selectKey keyProperty="studentId" resultType="int" order="BEFORE">
             select nextval('student_id_seq')

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "mindware.com.mapper.PaymentPlanMapper">
+
+    <resultMap type="paymentplan" id="PaymentPlanResult">
+        <id 	property="paymentPlanId" column="payment_plan_id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="paymentPlanNumber" column="payment_plan_number"/>
+        <result property="paymentPlanDate" column="payment_plan_date"/>
+        <result property="paymentPlanAmount" column="payment_plan_amount"/>
+    </resultMap>
+
+    <select id="findPaymentPlanByStudentId" resultMap="PaymentPlanResult" parameterType="int">
+        select *
+        from payment_plan
+        where student_id = #{studentId}
+        order by payment_number
+    </select>
+
+
+    <insert id="insertPaymentPlan"  parameterType="paymentplan" keyProperty="paymentPlanId" >
+        <selectKey keyProperty="paymentPlanId" resultType="int" order="BEFORE">
+            select nextval('payment_plan_id_seq')
+        </selectKey>
+        insert into payment_plan (
+        payment_plan_id,
+        student_id,
+        payment_plan_number,
+        payment_plan_date,
+        paymet_plan_amount)
+        values (
+        #{paymentPlanId},
+        #{studentId},
+        #{paymentPlanNumber},
+        #{paymentPlanDay},
+        #{paymentPlanAmount}
+        )
+
+    </insert>
+
+    <update id="updatePaymentPlan" parameterType="paymentplan">
+        update payment_plan
+        set
+        payment_plan_amount = #{paymentPlanAmount},
+        where payment_plan = #{parameterId}
+    </update>
+
+    <delete id="deletePaymentPlan" parameterType="int">
+        delete
+        from payment_plan
+        where student_id = #{studentId}
+
+    </delete>
+
+
+</mapper>

@@ -9,6 +9,8 @@
         <id 	property="classPeriodId" column="class_period_id"/>
         <result property="year" column="year"/>
         <result property="state" column="state"/>
+        <result property="initDate" column="init_date"/>
+        <result property="endDate" column="end_date"/>
 
     </resultMap>
 
@@ -34,17 +36,23 @@
         insert into class_period (
         class_period_id,
         year,
-        state)
+        state,
+        init_date,
+        end_date)
         values (
         #{classPeriodId},
         #{year},
-        #{state})
+        #{state},
+        #{initDate},
+        #{endDate})
     </insert>
 
     <update id="updateClassPeriod" parameterType="classperiod">
         update class_period
         set
-        state = #{state}
+        state = #{state},
+        init_date =#{initDate},
+        end_date = #{endDate}
         where class_period_id = #{classPeriodId}
 
     </update>

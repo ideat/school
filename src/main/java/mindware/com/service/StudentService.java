@@ -50,5 +50,13 @@ public class StudentService {
         }
     }
 
-
+    public Student findStudentById(int studentId){
+        SqlSession sqlSession = MyBatisSqlSessionFactory.getSqlSession("development");
+        try{
+            StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);
+            return studentMapper.findStudentById(studentId);
+        }finally {
+            sqlSession.close();
+        }
+    }
 }

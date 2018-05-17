@@ -84,7 +84,7 @@ public class MyUI extends UI  implements ClientConnector.DetachListener {
         UI.getCurrent().getNavigator().addView(StudentForm.class.getSimpleName(), StudentForm.class);
         UI.getCurrent().getNavigator().addView(TypeFeeForm.class.getSimpleName(), TypeFeeForm.class);
         UI.getCurrent().getNavigator().addView(UserForm.class.getSimpleName(), UserForm.class);
-
+        UI.getCurrent().getNavigator().addView(PaymentPlanForm.class.getSimpleName(), PaymentPlanForm.class);
 //    	UI.getCurrent().getNavigator().addView(ThemeBuilderPage.class.getSimpleName(), ThemeBuilderPage.class);
         UI.getCurrent().getNavigator().addView(SettingsPage.class.getSimpleName(), SettingsPage.class);
         UI.getCurrent().getNavigator().setErrorView(UserForm.class);
@@ -154,7 +154,7 @@ public class MyUI extends UI  implements ClientConnector.DetachListener {
         notiCenter.setNotificationButton(notiButton);
 
         TopMenuLabel label = TopMenuLabelBuilder.get()
-                .setCaption("<b>Generador contratos</b>")
+                .setCaption("<b>COBRO CUOTAS</b>")
                 .setIcon(new ThemeResource("images/Logo.png"))
                 .build(hybridMenu);
 
@@ -218,6 +218,13 @@ public class MyUI extends UI  implements ClientConnector.DetachListener {
                         .withCaption("Pagos por caja")
                         .withIcon(VaadinIcons.MONEY_EXCHANGE)
                         .withNavigateTo(PaymentCashForm.class)
+                        .build());
+            }
+            if (Arrays.asList(listOptions).contains("0")) {
+                paymentList.addLeftMenuButton(LeftMenuButtonBuilder.get()
+                        .withCaption("Crear plan de pagos")
+                        .withIcon(VaadinIcons.MONEY_DEPOSIT)
+                        .withNavigateTo(PaymentPlanForm.class)
                         .build());
             }
 
