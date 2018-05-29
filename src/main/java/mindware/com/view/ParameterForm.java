@@ -71,7 +71,6 @@ public class ParameterForm extends CustomComponent implements View {
 
         gridParameter.addItemClickListener(itemClick -> {
             fillDataParameterSelected(itemClick.getItem());
-            txtValueParameter.setEnabled(false);
         });
     }
 
@@ -84,7 +83,7 @@ public class ParameterForm extends CustomComponent implements View {
     }
 
     private boolean validateTypeValue(int control){
-        if (parameterService.findParameterByNameAndType(cmbTypeParameter.getValue().toString(),txtValueParameter.getValue())<=control)
+        if (parameterService.countParameterByNameAndType(cmbTypeParameter.getValue().toString(),txtValueParameter.getValue())<=control)
             return true;
         else return false;
     }
@@ -141,7 +140,7 @@ public class ParameterForm extends CustomComponent implements View {
         cmbTypeParameter = new ComboBox("Tipo parametro");
         cmbTypeParameter.setStyleName(ValoTheme.COMBOBOX_TINY);
         cmbTypeParameter.setEmptySelectionAllowed(false);
-        cmbTypeParameter.setItems("NIVEL_CURSOS","CURSOS","CONCEPTO_PAGOS");
+        cmbTypeParameter.setItems("NIVEL_CURSOS","CURSOS","CONCEPTO_PAGOS","COBRO_CUOTAS","COMPUTACION");
         gridMainLayout.addComponent(cmbTypeParameter,1,0);
 
         txtDescriptionParameter = new TextField("Nombre parametro");

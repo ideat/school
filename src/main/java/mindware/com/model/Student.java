@@ -1,6 +1,7 @@
 package mindware.com.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class Student {
     private Integer studentId;
@@ -17,8 +18,36 @@ public class Student {
     private String classRoom;
     private String cellNumber;
     private String courseLevel;
+    private String turn;
     private ClassPeriod classPeriod;
     private TypeFee typeFee;
+    private List<PaymentPlan> paymentPlanList;
+    private List<Payments> paymentsList;
+
+
+    public List<PaymentPlan> getPaymentPlanList() {
+        return paymentPlanList;
+    }
+
+    public void setPaymentPlanList(List<PaymentPlan> paymentPlanList) {
+        this.paymentPlanList = paymentPlanList;
+    }
+
+    public List<Payments> getPaymentsList() {
+        return paymentsList;
+    }
+
+    public void setPaymentsList(List<Payments> paymentsList) {
+        this.paymentsList = paymentsList;
+    }
+
+    public String getTurn() {
+        return turn;
+    }
+
+    public void setTurn(String turn) {
+        this.turn = turn;
+    }
 
     public String getCourseLevel() {
         return courseLevel;

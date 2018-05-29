@@ -20,9 +20,11 @@
         <result property="retirementDate" column="retirement_date"/>
         <result property="classRoom" column="classroom"/>
         <result property="courseLevel" column="course_level"/>
-
+        <result property="turn" column="turn"/>
         <association property="typeFee"  column="type_fee_id" javaType="typefee" resultMap="TypeFeeResult" />
         <association property="classPeriod"  column="class_period_id" javaType="classperiod" resultMap="ClassPeriodResult" />
+        <collection property="paymentPlanList" column="student_id" ofType="PaymentPlan" resultMap="PaymentPlanResult"/>
+        <collection property="paymentsList" column="student_id" ofType="Payments" resultMap="PaymentsResult"/>
     </resultMap>
 
     <resultMap type="classperiod" id="ClassPeriodResult">
@@ -37,6 +39,28 @@
         <result property="mountFee" column="mount_fee"/>
         <result property="nameFee" column="name_fee"/>
         <result property="discountPercentaje" column="discount_percentaje"/>
+    </resultMap>
+
+    <resultMap type="paymentplan" id="PaymentPlanResult">
+        <id 	property="paymentPlanId" column="payment_plan_id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="paymentPlanNumber" column="payment_plan_number"/>
+        <result property="paymentPlanDate" column="payment_plan_date"/>
+        <result property="paymentPlanAmount" column="payment_plan_amount"/>
+    </resultMap>
+
+    <resultMap type="payments" id="PaymentsResult">
+        <id 	property="paymentId" column="payment_id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="paymentDate" column="payment_date"/>
+        <result property="paymentMount" column="payment_mount"/>
+        <result property="description" column="description"/>
+        <result property="paymentConcept" column="payment_concept"/>
+        <result property="paymentType" column="payment_type"/>
+        <result property="invoiceNumber" column="invoice_number"/>
+        <result property="courseLevel" column="course_level"/>
+        <result property="userId" column="user_id"/>
+        <result property="fullNameStudent" column="full_name_student"/>
     </resultMap>
 
 
@@ -87,7 +111,8 @@
         born_date,
         retirement_date,
         classroom,
-        course_level)
+        course_level,
+        turn)
         values (
         #{studentId},
         #{classPeriodId},
@@ -102,7 +127,8 @@
         #{bornDate},
         #{retirementDate},
         #{classRoom},
-        #{courseLevel})
+        #{courseLevel},
+        #{turn})
     </insert>
 
     <update id="updateStudent" parameterType="student">
@@ -118,8 +144,8 @@
         born_date = #{bornDate},
         parents = #{parents}::json,
         classroom = #{classRoom},
-        course_level = #{courseLevel}
-
+        course_level = #{courseLevel},
+        turn = #{turn}
         where student_id = #{studentId}
 
     </update>

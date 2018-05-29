@@ -17,13 +17,14 @@
         <result property="courseLevel" column="course_level"/>
         <result property="userId" column="user_id"/>
         <result property="fullNameStudent" column="full_name_student"/>
+        <result property="paymentPeriod" column="paymentPeriod"/>
     </resultMap>
 
     <select id="findPaymentsByDates" resultMap="PaymentsResult" parameterType="map">
         select *
         from payments
         where payment_date between #{initDate} and #{endDate}
-        order by payment_day, student_id
+        order by student_id, payment_date
     </select>
 
     <select id="findPaymentsByStudentIdAndYear" resultMap="PaymentsResult" parameterType="map">
@@ -34,6 +35,13 @@
         where c.year = #{year}
         and s.student_id = #{studentId}
         order by payment_date
+    </select>
+
+    <select id="countPaymentsPeriod" resultType="int" parameterType="string">
+        select count(*)
+        from payments
+        where payment_period = #{paymentPeriod}
+
     </select>
 
     <insert id="insertPayments"  parameterType="payments" keyProperty="paymentId" >
@@ -51,7 +59,8 @@
         invoice_number,
         full_name_student,
         course_level,
-        user_id)
+        user_id,
+        payment_period)
         values (
         #{paymentId},
         #{studentId},
@@ -63,7 +72,8 @@
         #{invoiceNumber},
         #{fullNameStudent},
         #{courseLevel},
-        #{userId}
+        #{userId},
+        #{paymentPeriod}
         )
 
     </insert>
@@ -71,7 +81,7 @@
     <update id="updatePayments" parameterType="payments">
         update payments
         set
-        description = #{description},
+        description = #{description}
         where payment_id = #{paymentId}
     </update>
 

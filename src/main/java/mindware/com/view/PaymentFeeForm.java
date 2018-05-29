@@ -68,9 +68,16 @@ public class PaymentFeeForm extends CustomComponent implements View {
     private void loadExcel(Upload.FinishedEvent event) throws IOException {
 
         ProcessExcel processExcel = new ProcessExcel();
-        paymentsList = processExcel.paymentsFromExcelFile(tempFile);
+        if (processExcel.verifyPaymentPeriod(tempFile)) {
+            paymentsList = processExcel.paymentsFromExcelFile(tempFile);
+            fillGridPayments(paymentsList);
+        }else {
+            Notification.show("ERROR",
+                    "Periodo de pagos ya fue importado, seleccione otro archivo",
+                    Notification.Type.ERROR_MESSAGE);
+        }
 
-        fillGridPayments(paymentsList);
+
 
         tempFile.delete();
     }

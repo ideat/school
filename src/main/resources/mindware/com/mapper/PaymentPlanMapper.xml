@@ -17,7 +17,7 @@
         select *
         from payment_plan
         where student_id = #{studentId}
-        order by payment_number
+        order by payment_plan_number
     </select>
 
 
@@ -30,12 +30,12 @@
         student_id,
         payment_plan_number,
         payment_plan_date,
-        paymet_plan_amount)
+        payment_plan_amount)
         values (
         #{paymentPlanId},
         #{studentId},
         #{paymentPlanNumber},
-        #{paymentPlanDay},
+        #{paymentPlanDate},
         #{paymentPlanAmount}
         )
 
@@ -44,11 +44,11 @@
     <update id="updatePaymentPlan" parameterType="paymentplan">
         update payment_plan
         set
-        payment_plan_amount = #{paymentPlanAmount},
-        where payment_plan = #{parameterId}
+        payment_plan_amount = #{paymentPlanAmount}
+        where payment_plan_id = #{paymentPlanId}
     </update>
 
-    <delete id="deletePaymentPlan" parameterType="int">
+    <delete id="deletePaymentPlanByStudentId" parameterType="int">
         delete
         from payment_plan
         where student_id = #{studentId}

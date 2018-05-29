@@ -10,7 +10,7 @@
         <result property="rolId" column="rol_id"/>
         <result property="login" column="login"/>
         <result property="password" column="password"/>
-        <result property="nameUser" column="name_user"/>
+        <result property="userName" column="user_name"/>
         <result property="state" column="state"/>
         <association property="rol"  column="rol_id" javaType="rol" resultMap="RolResult" />
     </resultMap>
@@ -26,7 +26,7 @@
         select *
         from public.users u
         inner join rol r on (r.rol_id=u.rol_id)
-        order by name_user
+        order by user_name
     </select>
 
     <select id="findUserByUserId" resultMap="UserResult" parameterType="int">
@@ -48,7 +48,7 @@
         from public.users u
         inner join rol r on (r.rol_id=u.rol_id)
         where u.login = #{login} and u.password=#{password}
-        order by name_user
+        order by user_name
     </select>
 
     <insert id="insertUser"  parameterType="user" keyProperty="userId" >
@@ -60,14 +60,14 @@
         rol_id,
         login,
         password,
-        name_user,
+        user_name,
         state)
         values (
         #{userId},
         #{rolId},
         #{login},
         #{password},
-        #{nameUser},
+        #{userName},
         #{state})
     </insert>
 
@@ -76,7 +76,7 @@
         set
         rol_id = #{rolId},
         password = #{password},
-        name_user = #{nameUser},
+        user_name = #{userName},
         state = #{state}
         where user_id = #{userId}
 

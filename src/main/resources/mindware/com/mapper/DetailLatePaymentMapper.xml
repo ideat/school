@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "mindware.com.mapper.DetailLatePaymentMapper">
+
+    <resultMap type="detaillatepayment" id="DetailLatePaymentResult">
+        <id 	property="studentId" column="student_id"/>
+        <result property="fullNameStudent" column="full_name_student"/>
+        <result property="paymentDate" column="payment_date"/>
+        <result property="courseLevel" column="course_level"/>
+        <result property="invoiceNumber" column="invoice_number"/>
+        <result property="description" column="description"/>
+        <result property="paymentMount" column="payment_mount"/>
+        <result property="balance" column="balance"/>
+        <result property="paymentConcept" column="payment_concept"/>
+        <result property="totalPayment" column="total_payment"/>
+        <result property="paymentComputation" column="payment_computation"/>
+
+    </resultMap>
+
+    <select id="findDetailLatePaymentByStudentId" resultMap="DetailLatePaymentResult" parameterType="int">
+        select p.payment_id, s.student_id, (s.name_student || ' '|| s.last_name_student) as full_name_student, s.course_level
+        ,p.payment_date, p.invoice_number, p.payment_concept, p.description, p.payment_mount,
+        (select sum(payment_plan_amount)
+        from payment_plan
+        where payment_plan.student_id = #{studentId}
+        ) as total_payment,
+        cast ((select value_parameter
+        from parameter
+        where type_parameter = 'COMPUTACION'
+        and state = 'ACTIVO'
+        ) as decimal) as payment_computation
+        from student s
+        left join payments p on s.student_id = p.student_id
+        inner join class_period c on c.class_period_id = s.class_period_id
+        where s.student_id = #{studentId}
+        and c.state = 'ACTIVO'
+    </select>
+
+</mapper>

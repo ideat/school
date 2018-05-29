@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "mindware.com.mapper.LatePaymentMapper">
+
+    <resultMap type="latepayment" id="LatePaymentResult">
+        <id 	property="studentId" column="student_id"/>
+        <result property="nameStudent" column="name_student"/>
+        <result property="lastNameStudent" column="last_name_student"/>
+        <result property="courseLevel" column="course_level"/>
+        <result property="turn" column="turn"/>
+        <result property="sumPaymentPlanAmount" column="sum_payment_plan_amount"/>
+        <result property="sumPaymentMount" column="sum_payment_mount"/>
+
+    </resultMap>
+
+    <select id="findLatePaymenActiveByCutoffDate" resultMap="LatePaymentResult" parameterType="map">
+        select s.student_id, s.name_student, s.last_name_student, s.course_level,s.turn,
+        spp.sum_payment_plan_amount,
+        case
+        when sp.sum_payment_mount is null then 0
+        else sp.sum_payment_mount
+        end as sum_payment_mount
+        from student s
+        inner join class_period c on (s.class_period_id = c.class_period_id)
+        inner join (
+        select s.student_id, sum(pp.payment_plan_amount) as sum_payment_plan_amount
+        from student s
+        inner join payment_plan pp on pp.student_id = s.student_id
+        where  <![CDATA[
+         pp.payment_plan_date <= #{cutoffDate}
+        ]]>
+        group by 1
+        ) as spp on s.student_id = spp.student_id
+        LEFT join (
+        select s.student_id, sum(p.payment_mount) as sum_payment_mount
+        from student s
+        inner join payments p on s.student_id = p.student_id
+        where <![CDATA[
+          p.payment_date <= #{cutoffDate}
+        ]]>
+        and p.payment_concept in ('PENSIONES','MENSUALIDAD')
+        group by 1
+        ) as sp  on (s.student_id = sp.student_id)
+        WHERE s.retirement_date is null
+        and c.state = 'ACTIVO'
+        order by s.last_name_student, s.name_student, s.course_level, s.turn
+
+    </select>
+
+</mapper>

@@ -72,6 +72,10 @@ $v-selection-item-border-radius: 0;
     }
   }
 
+  .v-grid-row.error_row > td {
+    background-color: red;
+  }
+
   .time-only .v-inline-datefield-calendarpanel-header,
   .time-only .v-inline-datefield-calendarpanel-body {
     display: none;

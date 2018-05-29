@@ -1,5 +1,11 @@
 package mindware.com.utilities;
 
+import com.vaadin.server.*;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,6 +18,29 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Util {
+
+     public StreamResource getStream(File inputfile) {
+
+        StreamResource.StreamSource source = new StreamResource.StreamSource() {
+
+            public InputStream getStream() {
+
+                InputStream input=null;
+                try
+                {
+                    input = new FileInputStream(inputfile);
+                }
+                catch (FileNotFoundException e)
+                {
+                    e.printStackTrace();
+                }
+                return input;
+
+            }
+        };
+        StreamResource resource = new StreamResource ( source, inputfile.getName());
+        return resource;
+    }
 
     public Date dateWithFixedDayAndIncMonth(int fixedDay, LocalDate date, int incMonth){
         Calendar calendar = Calendar.getInstance();

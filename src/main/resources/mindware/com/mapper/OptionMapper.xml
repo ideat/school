@@ -13,7 +13,7 @@
 
     <select id="findAllOptions" resultMap="OptionResult" >
         select *
-        from option
+        from public.option
     </select>
 
 </mapper>

@@ -54,4 +54,14 @@ public class PaymentsService {
             sqlSession.close();
         }
     }
+
+    public int countPaymentsPeriod(String paymentPeriod){
+        SqlSession sqlSession = MyBatisSqlSessionFactory.getSqlSession("development");
+        try{
+            PaymentsMapper paymentsMapper = sqlSession.getMapper(PaymentsMapper.class);
+            return paymentsMapper.countPaymentsPeriod(paymentPeriod);
+        }finally {
+            sqlSession.close();
+        }
+    }
 }

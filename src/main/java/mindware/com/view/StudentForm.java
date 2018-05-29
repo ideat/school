@@ -7,11 +7,9 @@ import com.vaadin.navigator.View;
 import com.vaadin.ui.*;
 import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.themes.ValoTheme;
-import mindware.com.model.ClassPeriod;
-import mindware.com.model.Parents;
-import mindware.com.model.Student;
-import mindware.com.model.TypeFee;
+import mindware.com.model.*;
 import mindware.com.service.ClassPeriodService;
+import mindware.com.service.ParameterService;
 import mindware.com.service.StudentService;
 import mindware.com.service.TypeFeeService;
 import mindware.com.utilities.Util;
@@ -21,6 +19,7 @@ import org.vaadin.gridutil.cell.GridCellFilter;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class StudentForm extends CustomComponent implements View {
@@ -38,6 +37,7 @@ public class StudentForm extends CustomComponent implements View {
     private TextField txtAddress;
     private DateField dfRegistrationDate;
     private DateField dfBornDate;
+    private ComboBox cmbTurn;
     private DateField dfRetirementDate;
     private ComboBox cmbCourseLevel;
     private Grid<Parents> gridParents;
@@ -73,6 +73,7 @@ public class StudentForm extends CustomComponent implements View {
         fillStudentsPerido(yearGlobal);
         headerGridParent();
         fillCombos();
+        fillCourseLevel();
         postBuild();
     }
 
@@ -129,6 +130,16 @@ public class StudentForm extends CustomComponent implements View {
         });
     }
 
+    private void fillCourseLevel(){
+        ParameterService parameterService = new ParameterService();
+        List<String> courseLevelList = new ArrayList<>();
+        List<Parameter> parameterList=  parameterService.findParameterByType("NIVEL_CURSOS");
+        for(Parameter parameter:parameterList){
+            courseLevelList.add(parameter.getValueParameter());
+        }
+        cmbCourseLevel.setItems(courseLevelList);
+    }
+
     private void clearFieldsStudent(){
         cmbClassPeriod.clear();
         cmbTypeFee.clear();
@@ -141,6 +152,7 @@ public class StudentForm extends CustomComponent implements View {
         dfRegistrationDate.clear();
         dfBornDate.clear();
         cmbCourseLevel.clear();
+        cmbTurn.clear();
     }
 
     private void clearFieldsParent(){
@@ -177,9 +189,10 @@ public class StudentForm extends CustomComponent implements View {
         txtAddress.setValue(student.getAddress());
         dfRegistrationDate.setValue(new Util().dateToLocalDate(student.getRegistrationDate()));
         dfBornDate.setValue(new Util().dateToLocalDate(student.getBornDate()));
-        cmbCourseLevel.setValue(student.getClassRoom());
+        cmbCourseLevel.setValue(student.getCourseLevel());
         cmbClassPeriod.setValue(student.getClassPeriod());
         cmbTypeFee.setValue(student.getTypeFee());
+        cmbTurn.setValue(student.getTurn());
 
     }
 
@@ -206,23 +219,39 @@ public class StudentForm extends CustomComponent implements View {
         this.filterStudent.setTextFilter("nameStudent", true, false);
         this.filterStudent.setTextFilter("lastNameStudent", true, false);
         this.filterStudent.setTextFilter("courseLevel", true, false);
+        this.filterStudent.setNumberFilter("studentId", Integer.class ,"ID invalido","","");
+        this.filterStudent.setNumberFilter("typeFeeId",Integer.class );
+        this.filterStudent.setComboBoxFilter("turn", String.class , Arrays.asList("MAÑANA", "TARDE", "NOCHE"));
+
+//        ComboBox countryCombo = this.filterStudent.setComboBoxFilter("typeFeeId", typeFeeList);
+    }
+
+
+
+    private List<TypeFee> getTypeFeeList(){
+        TypeFeeService typeFeeService = new TypeFeeService();
+
+        return typeFeeService.findTypeFeeByClassPeriodYear(yearGlobal);
+
     }
 
     private void headerGridStudent(){
         gridStudent.removeAllColumns();
         if(gridStudent.getHeaderRowCount()>1)
             gridStudent.removeHeaderRow(1);
-        gridStudent.addColumn(Student::getStudentId).setCaption("ID").setId("studentId");
+        gridStudent.addColumn(Student::getStudentId).setCaption("ID").setId("studentId").setWidth(130);
         gridStudent.addColumn(Student::getLastNameStudent).setCaption("Apellidos").setId("lastNameStudent");
         gridStudent.addColumn(Student::getNameStudent).setCaption("Nombres").setId("nameStudent");
-        gridStudent.addColumn(Student::getCourseLevel).setCaption("Nivel").setId("courseLevel");
+        gridStudent.addColumn(Student::getCourseLevel).setCaption("Nivel").setId("courseLevel").setWidth(110);
+        gridStudent.addColumn(Student::getTurn).setCaption("Turno").setId("turn").setWidth(100);
         gridStudent.addColumn(Student::getPhoneNumber).setCaption("Telf. domicilio").setId("phoneNumber");
         gridStudent.addColumn(Student::getCellNumber).setCaption("Celular").setId("cellNumber");
         gridStudent.addColumn(Student::getAddress).setCaption("Dirección").setId("address");
-        gridStudent.addColumn(Student::getRegistrationDate).setCaption("Fecha inscripción").setId("registrationDate").setRenderer(new DateRenderer(("%1$td-%1$tm-%1$tY")));
-        gridStudent.addColumn(Student::getBornDate).setCaption("Fecha nacimiento").setId("bornDate").setRenderer(new DateRenderer(("%1$td-%1$tm-%1$tY")));
+        gridStudent.addColumn(Student::getRegistrationDate).setCaption("Fecha inscripción").setId("registrationDate").setRenderer(new DateRenderer(("%1$td-%1$tm-%1$tY"))).setWidth(150);
+        gridStudent.addColumn(Student::getBornDate).setCaption("Fecha nacimiento").setId("bornDate").setRenderer(new DateRenderer(("%1$td-%1$tm-%1$tY"))).setWidth(150);
         gridStudent.addColumn(Student::getClassPeriodId).setCaption("Gestión").setId("classPeriodId");
-        gridStudent.addColumn(Student::getTypeFeeId).setCaption("Tipo cuota").setId("typeFeeId");
+        gridStudent.addColumn(Student::getTypeFeeId).setCaption("Tipo cuota").setId("typeFeeId").setWidth(130);
+        gridStudent.addColumn(Student->Student.getTypeFee().getNameFee()).setCaption("Tipo cuota").setId("typeFee");
 
     }
 
@@ -315,6 +344,7 @@ public class StudentForm extends CustomComponent implements View {
         student.setCourseLevel(cmbCourseLevel.getValue().toString());
         student.setClassPeriodId(cmbClassPeriod.getValue().getClassPeriodId());
         student.setTypeFeeId(cmbTypeFee.getValue().getTypeFeeId());
+        student.setTurn(cmbTurn.getValue().toString());
 
         return student;
     }
@@ -333,6 +363,7 @@ public class StudentForm extends CustomComponent implements View {
         if (dfRegistrationDate.isEmpty()) return false;
         if (dfBornDate.isEmpty()) return false;
         if (cmbCourseLevel.isEmpty()) return false;
+        if (cmbTurn.isEmpty()) return false;
 
         return true;
     }
@@ -346,6 +377,7 @@ public class StudentForm extends CustomComponent implements View {
         if (txtAddressParent.isEmpty()) return false;
         if (dfBornDateParent.isEmpty()) return false;
         if (cmbTypeRelationShip.isEmpty()) return false;
+
 
         return true;
     }
@@ -385,59 +417,66 @@ public class StudentForm extends CustomComponent implements View {
 
         txtNameStudent = new TextField("Nombres");
         txtNameStudent.setStyleName(ValoTheme.TEXTFIELD_TINY);
-        gridMainLayoutStudent.addComponent(txtNameStudent,0,1);
+        gridMainLayoutStudent.addComponent(txtNameStudent,1,0);
 
         txtLastNameStudent = new TextField("Apellidos Paterno/Materno");
         txtLastNameStudent.setStyleName(ValoTheme.TEXTFIELD_TINY);
-        gridMainLayoutStudent.addComponent(txtLastNameStudent,1,1);
+        gridMainLayoutStudent.addComponent(txtLastNameStudent,2,0);
 
         txtAddress = new TextField("Dirección domicilio");
         txtAddress.setStyleName(ValoTheme.TEXTFIELD_TINY);
-        gridMainLayoutStudent.addComponent(txtAddress,2,1);
+        gridMainLayoutStudent.addComponent(txtAddress,3,0);
 
         txtPhoneNumber = new TextField("Telf. domicilio");
         txtPhoneNumber.setStyleName(ValoTheme.TEXTFIELD_TINY);
-        gridMainLayoutStudent.addComponent(txtPhoneNumber,3,1);
+        gridMainLayoutStudent.addComponent(txtPhoneNumber,0,1);
 
         txtCellNumber = new TextField("Nro. celular");
         txtCellNumber.setStyleName(ValoTheme.TEXTFIELD_TINY);
-        gridMainLayoutStudent.addComponent(txtCellNumber,4,1);
+        gridMainLayoutStudent.addComponent(txtCellNumber,1,1);
 
         dfBornDate = new DateField("Fecha nacimiento (dd-mm-yyyy)");
         dfBornDate.setStyleName(ValoTheme.DATEFIELD_TINY);
         dfBornDate.setDateFormat("dd-MM-yyyy");
-        gridMainLayoutStudent.addComponent(dfBornDate,0,2);
+        gridMainLayoutStudent.addComponent(dfBornDate,2,1);
 
         dfRegistrationDate = new DateField("Fecha inscripción (dd-mm-yyyy)");
         dfRegistrationDate.setStyleName(ValoTheme.DATEFIELD_TINY);
-        gridMainLayoutStudent.addComponent(dfRegistrationDate,1,2);
+        dfRegistrationDate.setDateFormat("dd-MM-yyyy");
+        gridMainLayoutStudent.addComponent(dfRegistrationDate,3,1);
 
         cmbCourseLevel = new ComboBox("Nivel");
         cmbCourseLevel.setStyleName(ValoTheme.TEXTFIELD_TINY);
-        gridMainLayoutStudent.addComponent(cmbCourseLevel,2,2);
+        gridMainLayoutStudent.addComponent(cmbCourseLevel,0,2);
 
         cmbClassPeriod = new ComboBox<>("Gestión");
         cmbClassPeriod.setStyleName(ValoTheme.COMBOBOX_TINY);
         cmbClassPeriod.setEmptySelectionAllowed(false);
-        gridMainLayoutStudent.addComponent(cmbClassPeriod,3,2);
+        gridMainLayoutStudent.addComponent(cmbClassPeriod,1,2);
 
         cmbTypeFee = new ComboBox<>("Tipo cuota");
         cmbTypeFee.setStyleName(ValoTheme.COMBOBOX_TINY);
         cmbTypeFee.setEmptySelectionAllowed(false);
-        gridMainLayoutStudent.addComponent(cmbTypeFee,4,2);
+        gridMainLayoutStudent.addComponent(cmbTypeFee,2,2);
+
+        cmbTurn = new ComboBox("Turno clases");
+        cmbTurn.setStyleName(ValoTheme.COMBOBOX_TINY);
+        cmbTurn.setEmptySelectionAllowed(false);
+        cmbTurn.setItems("MAÑANA","TARDE","NOCHE");
+        gridMainLayoutStudent.addComponent(cmbTurn,3,2);
 
         btnSaveStudent = new Button("Guardar");
         btnSaveStudent.setStyleName(ValoTheme.BUTTON_PRIMARY);
         btnSaveStudent.setIcon(VaadinIcons.DATABASE);
         btnSaveStudent.setWidth("130px");
-        gridMainLayoutStudent.addComponent(btnSaveStudent,5,0);
+        gridMainLayoutStudent.addComponent(btnSaveStudent,4,0);
         gridMainLayoutStudent.setComponentAlignment(btnSaveStudent,Alignment.BOTTOM_LEFT);
 
         btnNewStudent = new Button("Nuevo");
         btnNewStudent.setStyleName(ValoTheme.BUTTON_FRIENDLY);
         btnNewStudent.setIcon(VaadinIcons.PLUS_CIRCLE);
         btnNewStudent.setWidth("130px");
-        gridMainLayoutStudent.addComponent(btnNewStudent,5,1);
+        gridMainLayoutStudent.addComponent(btnNewStudent,4,1);
         gridMainLayoutStudent.setComponentAlignment(btnNewStudent,Alignment.BOTTOM_LEFT);
 
         gridMainLayoutStudent.addComponent(buildPanelGridStudent(),0,3,5,4);

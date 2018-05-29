@@ -30,6 +30,19 @@ public class PaymentPlanService {
         }
     }
 
+    public void insertPaymentPlanList(List<PaymentPlan> paymentPlanList){
+        SqlSession sqlSession = MyBatisSqlSessionFactory.getSqlSession("development");
+        try{
+            PaymentPlanMapper paymentPlanMapper = sqlSession.getMapper(PaymentPlanMapper.class);
+            for(PaymentPlan paymentPlan:paymentPlanList) {
+                paymentPlanMapper.insertPaymentPlan(paymentPlan);
+            }
+            sqlSession.commit();
+        }finally {
+            sqlSession.close();
+        }
+    }
+
     public void updatePaymentPlan(PaymentPlan paymentPlan){
         SqlSession sqlSession = MyBatisSqlSessionFactory.getSqlSession("development");
         try{

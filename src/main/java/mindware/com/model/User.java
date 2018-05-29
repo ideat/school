@@ -5,7 +5,7 @@ public class User {
     private String login;
     private String password;
     private Integer rolId;
-    private String nameUser;
+    private String userName;
     private String state;
     private Rol rol;
 
@@ -49,12 +49,12 @@ public class User {
         this.rolId = rolId;
     }
 
-    public String getNameUser() {
-        return nameUser;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setNameUser(String nameUser) {
-        this.nameUser = nameUser;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getState() {

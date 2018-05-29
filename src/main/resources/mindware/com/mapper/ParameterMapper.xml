@@ -20,6 +20,14 @@
         order by parameter_id
     </select>
 
+    <select id="findValueParameterByTypeAndName" resultMap="ParameterResult" parameterType="map">
+        select *
+        from parameter
+        where type_parameter = #{typeParameter}
+        and description_parameter = #{descriptionParameter}
+
+    </select>
+
     <select id="findParameterByTypeAndState" resultMap="ParameterResult" parameterType="map">
         select *
         from parameter
@@ -28,11 +36,11 @@
         order by parameter_id
     </select>
 
-    <select id="findParameterByNameAndType" resultType="int" parameterType="map">
+    <select id="countParameterByNameAndType" resultType="int" parameterType="map">
         select count(*)
         from parameter
         where type_parameter = #{typeParameter}
-        and value_parameter = #{valueParameter}
+        and value_parameter = #{paymentComputation}
 
     </select>
 

@@ -3,18 +3,18 @@ package mindware.com.model;
 import java.util.Date;
 
 public class PaymentPlan {
-    private Integer paymentPlantId;
+    private Integer paymentPlanId;
     private Integer studentId;
-    private Integer paymentPlanNumer;
+    private Integer paymentPlanNumber;
     private Double paymentPlanAmount;
     private Date paymentPlanDate;
 
-    public Integer getPaymentPlantId() {
-        return paymentPlantId;
+    public Integer getPaymentPlanId() {
+        return paymentPlanId;
     }
 
-    public void setPaymentPlantId(Integer paymentPlantId) {
-        this.paymentPlantId = paymentPlantId;
+    public void setPaymentPlanId(Integer paymentPlanId) {
+        this.paymentPlanId = paymentPlanId;
     }
 
     public Integer getStudentId() {
@@ -25,12 +25,12 @@ public class PaymentPlan {
         this.studentId = studentId;
     }
 
-    public Integer getPaymentPlanNumer() {
-        return paymentPlanNumer;
+    public Integer getPaymentPlanNumber() {
+        return paymentPlanNumber;
     }
 
-    public void setPaymentPlanNumer(Integer paymentPlanNumer) {
-        this.paymentPlanNumer = paymentPlanNumer;
+    public void setPaymentPlanNumber(Integer paymentPlanNumber) {
+        this.paymentPlanNumber = paymentPlanNumber;
     }
 
     public Double getPaymentPlanAmount() {

@@ -11,6 +11,6 @@ public interface PaymentsMapper {
     void updatePayments(Payments payments);
     List<Payments> findPaymentsByDates(@Param("initDate") Date initDate, @Param("endDate") Date endDate);
     List<Payments> findPaymentsByStudentIdAndYear(@Param("studentId") int studentId, @Param("year") String year);
-
+    int countPaymentsPeriod(@Param("paymentPeriod") String paymentPeriod);
 
 }

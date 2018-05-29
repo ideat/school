@@ -84,10 +84,14 @@ public class MyUI extends UI  implements ClientConnector.DetachListener {
         UI.getCurrent().getNavigator().addView(StudentForm.class.getSimpleName(), StudentForm.class);
         UI.getCurrent().getNavigator().addView(TypeFeeForm.class.getSimpleName(), TypeFeeForm.class);
         UI.getCurrent().getNavigator().addView(UserForm.class.getSimpleName(), UserForm.class);
+        UI.getCurrent().getNavigator().addView(RolForm.class.getSimpleName(), RolForm.class);
         UI.getCurrent().getNavigator().addView(PaymentPlanForm.class.getSimpleName(), PaymentPlanForm.class);
+        UI.getCurrent().getNavigator().addView(PaymentEditForm.class.getSimpleName(), PaymentEditForm.class);
 //    	UI.getCurrent().getNavigator().addView(ThemeBuilderPage.class.getSimpleName(), ThemeBuilderPage.class);
         UI.getCurrent().getNavigator().addView(SettingsPage.class.getSimpleName(), SettingsPage.class);
+        UI.getCurrent().getNavigator().addView(LatePaymentForm.class.getSimpleName(), LatePaymentForm.class);
         UI.getCurrent().getNavigator().setErrorView(UserForm.class);
+
 
 
         if(hybridMenu.getMenuComponents().equals(EMenuComponents.ONLY_LEFT))
@@ -225,6 +229,20 @@ public class MyUI extends UI  implements ClientConnector.DetachListener {
                         .withCaption("Crear plan de pagos")
                         .withIcon(VaadinIcons.MONEY_DEPOSIT)
                         .withNavigateTo(PaymentPlanForm.class)
+                        .build());
+            }
+            if (Arrays.asList(listOptions).contains("0")) {
+                paymentList.addLeftMenuButton(LeftMenuButtonBuilder.get()
+                        .withCaption("Mora en pagos")
+                        .withIcon(VaadinIcons.MONEY_WITHDRAW)
+                        .withNavigateTo(LatePaymentForm.class)
+                        .build());
+            }
+            if (Arrays.asList(listOptions).contains("0")) {
+                paymentList.addLeftMenuButton(LeftMenuButtonBuilder.get()
+                        .withCaption("Editar detalle pagos")
+                        .withIcon(VaadinIcons.EDIT)
+                        .withNavigateTo(PaymentEditForm.class)
                         .build());
             }
 

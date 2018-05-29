@@ -1,10 +1,14 @@
 package mindware.com.view;
 
+import com.vaadin.data.Binder;
+import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.*;
 import com.vaadin.ui.renderers.DateRenderer;
+import com.vaadin.ui.renderers.NumberRenderer;
 import com.vaadin.ui.themes.ValoTheme;
+import de.steinwedel.messagebox.MessageBox;
 import mindware.com.model.PaymentPlan;
 import mindware.com.model.Student;
 import mindware.com.service.ClassPeriodService;
@@ -12,6 +16,7 @@ import mindware.com.service.PaymentPlanService;
 import mindware.com.service.StudentService;
 import mindware.com.utilities.PaymentPlanUtils;
 import org.vaadin.gridutil.cell.GridCellFilter;
+import org.vaadin.ui.NumberField;
 
 import java.util.List;
 
@@ -27,6 +32,7 @@ public class PaymentPlanForm extends CustomComponent implements View {
     private DateField dfInitDate;
     private DateField dfEndDate;
     private PaymentPlanUtils paymentPlanUtils;
+    private Student student;
 
     public PaymentPlanForm(){
         setCompositionRoot(buildGridMainLayout());
@@ -37,20 +43,77 @@ public class PaymentPlanForm extends CustomComponent implements View {
 
     private void postBuild(){
         fillGridStudents();
+
         gridStudent.addItemClickListener(itemClick -> {
-            Student student = itemClick.getItem();
-            List<PaymentPlan> paymentPlanList =  paymentPlanUtils.createPaymentPlan(itemClick.getItem().getStudentId(),
-                    dfInitDate.getValue(), dfEndDate.getValue(),10);
+            student = itemClick.getItem();
+            List<PaymentPlan> paymentPlanList = paymentPlanService.findPaymentPlanByStudentId(student.getStudentId());
             fillGridPaymentPlan(paymentPlanList);
+        });
+
+        btnCreatePaymentPlan.addClickListener(clickEvent -> {
+            if (student!=null) {
+                if (paymentPlanService.findPaymentPlanByStudentId(student.getStudentId()).size()<=0) {
+                    List<PaymentPlan> paymentPlanList = paymentPlanUtils.createPaymentPlan(student.getStudentId(),
+                            dfInitDate.getValue(), dfEndDate.getValue());
+                    fillGridPaymentPlan(paymentPlanList);
+                    paymentPlanService.insertPaymentPlanList(paymentPlanList);
+                }else {
+                    MessageBox.createQuestion()
+                            .withCaption("Advertencia")
+                            .withMessage("Ya tiene un plan de pagos, desea borrarlo? ")
+                            .withYesButton(()->{
+                                paymentPlanService.deletePaymentPlan(student.getStudentId());
+                                List<PaymentPlan> paymentPlanList = paymentPlanUtils.createPaymentPlan(student.getStudentId(),
+                                        dfInitDate.getValue(), dfEndDate.getValue());
+                                fillGridPaymentPlan(paymentPlanList);
+                                paymentPlanService.insertPaymentPlanList(paymentPlanList);
+
+                            })
+                            .withNoButton()
+                            .open();
+                }
+            }else{
+                Notification.show("Error",
+                        "Seleccione un estudiante",
+                        Notification.Type.ERROR_MESSAGE);
+            }
+        });
+
+        gridPaymentPlan.getEditor().addSaveListener(editorSaveEvent -> {
+            try {
+                paymentPlanService.updatePaymentPlan(editorSaveEvent.getBean());
+                Notification.show("Plan de pagos",
+                        "Cuota actualizada",
+                        Notification.Type.HUMANIZED_MESSAGE);
+            }catch (Exception e){
+                Notification.show("Error",
+                        "Al actualizar la cuota " + e.getMessage(),
+                        Notification.Type.ERROR_MESSAGE);
+            }
         });
     }
 
+
+
     private void fillGridPaymentPlan(List<PaymentPlan> paymentPlanList){
+        NumberField value = new NumberField();
+
         gridPaymentPlan.setItems(paymentPlanList);
         gridPaymentPlan.removeAllColumns();
-        gridPaymentPlan.addColumn(PaymentPlan::getPaymentPlanNumer).setCaption("Nro");
-        gridPaymentPlan.addColumn(PaymentPlan::getPaymentPlanDate).setCaption("Fecha").setRenderer(new DateRenderer(("%1$td-%1$tm-%1$tY")));;
-        gridPaymentPlan.addColumn(PaymentPlan::getPaymentPlanAmount).setCaption("Cuota");
+        gridPaymentPlan.addColumn(PaymentPlan::getPaymentPlanNumber).setCaption("Nro");
+        gridPaymentPlan.addColumn(PaymentPlan::getPaymentPlanDate).setCaption("Fecha").setRenderer(new DateRenderer(("%1$td-%1$tm-%1$tY")));
+//        gridPaymentPlan.addColumn(PaymentPlan::getPaymentPlanAmount).setCaption("Cuota").
+//                setId("paymentPlanAmount").setEditable(true);
+
+        Binder<PaymentPlan> binder = gridPaymentPlan.getEditor().getBinder();
+        gridPaymentPlan.addColumn(PaymentPlan::getPaymentPlanAmount,new NumberRenderer())
+                .setEditorBinding(binder
+                        .forField(new TextField())
+                        .withConverter(new StringToDoubleConverter("No es valido"))
+                        .bind(PaymentPlan::getPaymentPlanAmount, PaymentPlan::setPaymentPlanAmount)
+                ).setCaption("Cuota");
+
+
     }
 
     private void fillGridStudents(){
@@ -59,7 +122,7 @@ public class PaymentPlanForm extends CustomComponent implements View {
         String year = classPeriodService.findClassPeriodByState("ACTIVO").get(0).getYear();
         gridStudent.setItems(studentService.findStudentByPeriod(year));
         gridStudent.removeAllColumns();
-        gridStudent.addColumn(Student::getStudentId).setCaption("ID").setId("studentId");
+        gridStudent.addColumn(Student::getStudentId).setCaption("ID").setId("studentId").setWidth(120);
         gridStudent.addColumn(Student::getNameStudent).setCaption("Nombres").setId("nameStudent");
         gridStudent.addColumn(Student::getLastNameStudent).setCaption("Apellidos").setId("lastNameStudent");
         gridStudent.addColumn(Student::getCourseLevel).setCaption("Nivel").setId("courseLevel");
@@ -69,7 +132,7 @@ public class PaymentPlanForm extends CustomComponent implements View {
 
     private void filterGridStudent(final Grid grid){
         this.filterStudent = new GridCellFilter(grid);
-        this.filterStudent.setTextFilter("studentId", true, false);
+        this.filterStudent.setNumberFilter("studentId", Integer.class);
         this.filterStudent.setTextFilter("nameStudent", true, false);
         this.filterStudent.setTextFilter("lastNameStudent", true, false);
         this.filterStudent.setTextFilter("courseLevel", true, false);
@@ -78,18 +141,18 @@ public class PaymentPlanForm extends CustomComponent implements View {
     private GridLayout buildGridMainLayout(){
         gridMainLayout = new GridLayout();
         gridMainLayout.setColumns(6);
-        gridMainLayout.setRows(5);
+        gridMainLayout.setRows(15);
         gridMainLayout.setSpacing(true);
         gridMainLayout.setSizeFull();
 
-        gridMainLayout.addComponent(buildPanelGridStudent(),0,0,4,1);
-        gridMainLayout.addComponent(buildPanelGridPaymentPlan(),0,3,4,3);
+        gridMainLayout.addComponent(buildPanelGridStudent(),0,0,4,5);
+        gridMainLayout.addComponent(buildPanelGridPaymentPlan(),0,6,4,12);
 
         dfInitDate = new DateField("Fecha inicial");
         dfInitDate.setStyleName(ValoTheme.DATEFIELD_TINY);
         dfInitDate.setDateFormat("dd-MM-yyyy");
         gridMainLayout.addComponent(dfInitDate,5,0);
-        gridMainLayout.setComponentAlignment(dfInitDate,Alignment.BOTTOM_LEFT);
+        gridMainLayout.setComponentAlignment(dfInitDate,Alignment.TOP_LEFT);
 
         dfEndDate = new DateField("Fecha final");
         dfEndDate.setStyleName(ValoTheme.DATEFIELD_TINY);
@@ -100,8 +163,10 @@ public class PaymentPlanForm extends CustomComponent implements View {
         btnCreatePaymentPlan = new Button("Crear plan de pagos");
         btnCreatePaymentPlan.setStyleName(ValoTheme.BUTTON_PRIMARY);
         btnCreatePaymentPlan.setIcon(VaadinIcons.CALENDAR_BRIEFCASE);
+        btnCreatePaymentPlan.setWidth("200px");
         gridMainLayout.addComponent(btnCreatePaymentPlan,5,2);
         gridMainLayout.setComponentAlignment(btnCreatePaymentPlan,Alignment.TOP_LEFT);
+
         return gridMainLayout;
     }
 
@@ -110,10 +175,13 @@ public class PaymentPlanForm extends CustomComponent implements View {
         panelGridPaymentPlan.setStyleName(ValoTheme.PANEL_WELL);
         panelGridPaymentPlan.setHeight("250px");
 
-        gridPaymentPlan = new Grid<>();
+        gridPaymentPlan = new Grid<>(PaymentPlan.class);
         gridPaymentPlan.setStyleName(ValoTheme.TABLE_SMALL);
         gridPaymentPlan.setWidth("100%");
         gridPaymentPlan.setHeight("250px");
+        gridPaymentPlan.getEditor().setEnabled(true);
+        gridPaymentPlan.getEditor().setSaveCaption("Guardar");
+        gridPaymentPlan.getEditor().setCancelCaption("Cancelar");
         panelGridPaymentPlan.setContent(gridPaymentPlan);
 
         return panelGridPaymentPlan;

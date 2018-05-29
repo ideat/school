@@ -14,6 +14,15 @@ public class Payments {
     private Integer userId;
     private String courseLevel;
     private String fullNameStudent;
+    private String paymentPeriod;
+
+    public String getPaymentPeriod() {
+        return paymentPeriod;
+    }
+
+    public void setPaymentPeriod(String paymentPeriod) {
+        this.paymentPeriod = paymentPeriod;
+    }
 
     public String getFullNameStudent() {
         return fullNameStudent;
