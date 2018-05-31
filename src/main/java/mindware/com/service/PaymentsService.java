@@ -22,13 +22,33 @@ public class PaymentsService {
         }
     }
 
-
+    public void insertPayment(Payments payments){
+        SqlSession sqlSession = MyBatisSqlSessionFactory.getSqlSession("development");
+        try{
+            PaymentsMapper paymentsMapper = sqlSession.getMapper(PaymentsMapper.class);
+            paymentsMapper.insertPayments(payments);
+            sqlSession.commit();
+        }finally {
+            sqlSession.close();
+        }
+    }
 
     public void updatePayments(Payments payments){
         SqlSession sqlSession = MyBatisSqlSessionFactory.getSqlSession("development");
         try{
             PaymentsMapper paymentsMapper = sqlSession.getMapper(PaymentsMapper.class);
             paymentsMapper.updatePayments(payments);
+            sqlSession.commit();
+        }finally {
+            sqlSession.close();
+        }
+    }
+
+    public void deletePayments(int paymentId){
+        SqlSession sqlSession = MyBatisSqlSessionFactory.getSqlSession("development");
+        try{
+            PaymentsMapper paymentsMapper = sqlSession.getMapper(PaymentsMapper.class);
+            paymentsMapper.deletePayments(paymentId);
             sqlSession.commit();
         }finally {
             sqlSession.close();
@@ -54,6 +74,27 @@ public class PaymentsService {
             sqlSession.close();
         }
     }
+
+    public List<Payments> findPaymentsByStudentInvoiceDate(int studentId,String invoiceNumber, Date paymentDate){
+        SqlSession sqlSession = MyBatisSqlSessionFactory.getSqlSession("development");
+        try{
+            PaymentsMapper paymentsMapper = sqlSession.getMapper(PaymentsMapper.class);
+            return paymentsMapper.findPaymentsByStudentInvoiceDate(studentId,invoiceNumber,paymentDate);
+        }finally {
+            sqlSession.close();
+        }
+    }
+
+    public List<Payments> findPaymentsGroupedByTypeDateStudent(){
+        SqlSession sqlSession = MyBatisSqlSessionFactory.getSqlSession("development");
+        try{
+            PaymentsMapper paymentsMapper = sqlSession.getMapper(PaymentsMapper.class);
+            return paymentsMapper.findPaymentsGroupedByTypeDateStudent();
+        }finally {
+            sqlSession.close();
+        }
+    }
+
 
     public int countPaymentsPeriod(String paymentPeriod){
         SqlSession sqlSession = MyBatisSqlSessionFactory.getSqlSession("development");

@@ -4,6 +4,7 @@ import com.vaadin.data.HasValue;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.navigator.View;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import mindware.com.MyUI;
@@ -11,7 +12,7 @@ import mindware.com.model.User;
 import mindware.com.security.Encript;
 import mindware.com.service.UserService;
 
-public class LoginForm extends CustomComponent {
+public class LoginForm extends CustomComponent implements View {
 
         private AbsoluteLayout mainLayout;
         private GridLayout gridLayout_1;

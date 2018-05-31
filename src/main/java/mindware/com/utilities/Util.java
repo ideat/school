@@ -82,7 +82,19 @@ public class Util {
         else monthString = month.toString();
 
         return day.toString()+'-'+monthString+'-'+year.toString();
+    }
 
+    public String dateToString(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        Integer year = calendar.get(calendar.YEAR) ;
+        Integer month = calendar.get(calendar.MONTH)+1;
+        Integer day = calendar.get(calendar.DAY_OF_MONTH);
+        String monthString;
+        if (month<10) monthString = '0' + month.toString();
+        else monthString = month.toString();
+
+        return day.toString()+'-'+monthString+'-'+year.toString();
     }
 
     public Date stringToDate(String date, String format) {

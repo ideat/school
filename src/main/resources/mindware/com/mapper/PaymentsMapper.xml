@@ -27,6 +27,23 @@
         order by student_id, payment_date
     </select>
 
+    <select id="findPaymentsGroupedByTypeDateStudent" resultMap="PaymentsResult">
+        select p.student_id, p.payment_date, p.payment_type
+        , p.full_name_student, p.invoice_number,  sum(p.payment_mount) as payment_mount
+        from payments p
+        group by 1,2,3,4,5
+        order by student_id, payment_date
+    </select>
+
+    <select id="findPaymentsByStudentInvoiceDate" resultMap="PaymentsResult" parameterType="map">
+        select *
+        from payments
+        where payment_date = #{paymentDate}
+        and student_id = #{studentId}
+        and invoice_number = #{invoiceNumber}
+        order by payment_id
+    </select>
+
     <select id="findPaymentsByStudentIdAndYear" resultMap="PaymentsResult" parameterType="map">
         select p.*
         from payments p
@@ -85,6 +102,9 @@
         where payment_id = #{paymentId}
     </update>
 
-
+    <delete id="deletePayments" parameterType="int" >
+        delete from payments
+        where payment_id = #{paymentId}
+    </delete>
 
 </mapper>

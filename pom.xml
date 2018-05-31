@@ -33,6 +33,10 @@
 			<id>jitpack.io</id>
 			<url>https://jitpack.io</url>
 		</repository>
+		<repository>
+			<id>pentaho-releases</id>
+			<url>https://public.nexus.pentaho.org/content/groups/omni/</url>
+		</repository>
 	</repositories>
 
 	<dependencyManagement>
@@ -199,6 +203,88 @@
 			<version>2.8.2</version>
 		</dependency>
 
+		<!-- PENTAHO REPORTING -->
+
+		<dependency>
+			<groupId>org.pentaho.reporting.engine</groupId>
+			<artifactId>classic-core</artifactId>
+			<version>7.1.0.1-14</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.pentaho.reporting.engine</groupId>
+			<artifactId>classic-extensions-sampledata</artifactId>
+			<version>7.1.0.1-14</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.pentaho.reporting</groupId>
+			<artifactId>pentaho-reporting</artifactId>
+			<version>7.1.0.1-14</version>
+			<type>pom</type>
+		</dependency>
+
+		<dependency>
+			<groupId>pentaho-library</groupId>
+			<artifactId>libloader</artifactId>
+			<version>7.0.0.6-95</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pentaho-library</groupId>
+			<artifactId>libbase</artifactId>
+			<version>7.0.0.6-95</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pentaho-library</groupId>
+			<artifactId>libdocbundle</artifactId>
+			<version>7.0.0.6-95</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pentaho-library</groupId>
+			<artifactId>libfonts</artifactId>
+			<version>7.0.0.6-95</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pentaho-library</groupId>
+			<artifactId>libformat</artifactId>
+			<version>7.0.0.6-95</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pentaho-library</groupId>
+			<artifactId>libformula</artifactId>
+			<version>7.0.0.6-95</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pentaho-library</groupId>
+			<artifactId>librepository</artifactId>
+			<version>7.0.0.6-95</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pentaho-library</groupId>
+			<artifactId>libserializer</artifactId>
+			<version>7.0.0.6-95</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pentaho-library</groupId>
+			<artifactId>libxml</artifactId>
+			<version>7.0.0.6-95</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pentaho-library</groupId>
+			<artifactId>libswing</artifactId>
+			<version>7.0.0.6-95</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -217,9 +303,17 @@
 				<groupId>com.vaadin</groupId>
 				<artifactId>vaadin-maven-plugin</artifactId>
 				<version>${vaadin.plugin.version}</version>
+				<!--
+                <configuration>
+					<widgetsetMode>${vaadin.widgetset.mode}</widgetsetMode>
+                </configuration>
+				-->
+
 				<executions>
 					<execution>
 						<goals>
+							<goal>clean</goal>
+							<goal>resources</goal>
 							<goal>update-theme</goal>
 							<goal>update-widgetset</goal>
 							<goal>compile</goal>

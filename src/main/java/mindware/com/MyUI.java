@@ -78,19 +78,22 @@ public class MyUI extends UI  implements ClientConnector.DetachListener {
                 .build();
 
         UI.getCurrent().getNavigator().addView(UserForm.class.getSimpleName(), UserForm.class);
+//        UI.getCurrent().getNavigator().addView(UserPasswordForm.class.getSimpleName(), new UserPasswordForm(userId));
         UI.getCurrent().getNavigator().addView(ClassPeriodForm.class.getSimpleName(), new ClassPeriodForm());
         UI.getCurrent().getNavigator().addView(ParameterForm.class.getSimpleName(), ParameterForm.class);
         UI.getCurrent().getNavigator().addView(PaymentFeeForm.class.getSimpleName(), PaymentFeeForm.class);
+        UI.getCurrent().getNavigator().addView(PaymentPrintForm.class.getSimpleName(), PaymentPrintForm.class);
         UI.getCurrent().getNavigator().addView(StudentForm.class.getSimpleName(), StudentForm.class);
         UI.getCurrent().getNavigator().addView(TypeFeeForm.class.getSimpleName(), TypeFeeForm.class);
         UI.getCurrent().getNavigator().addView(UserForm.class.getSimpleName(), UserForm.class);
         UI.getCurrent().getNavigator().addView(RolForm.class.getSimpleName(), RolForm.class);
         UI.getCurrent().getNavigator().addView(PaymentPlanForm.class.getSimpleName(), PaymentPlanForm.class);
         UI.getCurrent().getNavigator().addView(PaymentEditForm.class.getSimpleName(), PaymentEditForm.class);
+        UI.getCurrent().getNavigator().addView(PaymentCashForm.class.getSimpleName(), PaymentCashForm.class);
 //    	UI.getCurrent().getNavigator().addView(ThemeBuilderPage.class.getSimpleName(), ThemeBuilderPage.class);
         UI.getCurrent().getNavigator().addView(SettingsPage.class.getSimpleName(), SettingsPage.class);
         UI.getCurrent().getNavigator().addView(LatePaymentForm.class.getSimpleName(), LatePaymentForm.class);
-        UI.getCurrent().getNavigator().setErrorView(UserForm.class);
+        UI.getCurrent().getNavigator().setErrorView(LoginForm.class);
 
 
 
@@ -245,6 +248,14 @@ public class MyUI extends UI  implements ClientConnector.DetachListener {
                         .withNavigateTo(PaymentEditForm.class)
                         .build());
             }
+            if (Arrays.asList(listOptions).contains("0")) {
+                paymentList.addLeftMenuButton(LeftMenuButtonBuilder.get()
+                        .withCaption("Reimprimir comprobantes")
+                        .withIcon(VaadinIcons.PRINT)
+                        .withNavigateTo(PaymentPrintForm.class)
+                        .build());
+            }
+
 
         }
         if (Arrays.asList(listOptions).contains("0")) {

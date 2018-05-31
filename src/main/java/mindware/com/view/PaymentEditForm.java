@@ -36,8 +36,8 @@ public class PaymentEditForm extends CustomComponent implements View {
         gridPayments.getEditor().addSaveListener(editorSaveEvent -> {
             try {
                 paymentsService.updatePayments(editorSaveEvent.getBean());
-                fillGridPayments(paymentsService.findPaymentsByDates(util.localDateToDate(dfDateInit.getValue()),
-                        util.localDateToDate(dfDateEnd.getValue())));
+//                fillGridPayments(paymentsService.findPaymentsByDates(util.localDateToDate(dfDateInit.getValue()),
+//                        util.localDateToDate(dfDateEnd.getValue())));
                 Notification.show("Actualizado",
                         "Descripcion",
                         Notification.Type.HUMANIZED_MESSAGE);
@@ -59,11 +59,12 @@ public class PaymentEditForm extends CustomComponent implements View {
     private void fillGridPayments(List<Payments> paymentsList){
         if (gridPayments.getHeaderRowCount()>1)
             gridPayments.removeHeaderRow(1);
-        gridPayments.setItems(paymentsList);
         gridPayments.removeAllColumns();
+
+        gridPayments.setItems(paymentsList);
         gridPayments.addColumn(Payments::getPaymentId).setCaption("paymentid").setId("paymentId").setHidden(true);
         gridPayments.addColumn(Payments::getStudentId).setCaption("ID").setId("studentId").setWidth(80);
-        gridPayments.addColumn(Payments::getFullNameStudent).setCaption("Nombre").setId("fullNameStudent");
+        gridPayments.addColumn(Payments::getFullNameStudent).setCaption("Nombre").setId("fullNameStudent").setWidth(200);
         gridPayments.addColumn(Payments::getCourseLevel).setCaption("Nivel").setId("courseLevel").setWidth(90);
         gridPayments.addColumn(Payments::getInvoiceNumber).setCaption("Factura").setId("invoiceNumber").setWidth(90);
         gridPayments.addColumn(Payments::getPaymentDate).setCaption("Fecha").setId("paymentDate").setWidth(110)

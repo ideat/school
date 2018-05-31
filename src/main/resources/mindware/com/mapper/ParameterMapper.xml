@@ -40,7 +40,7 @@
         select count(*)
         from parameter
         where type_parameter = #{typeParameter}
-        and value_parameter = #{paymentComputation}
+        and value_parameter = #{valueParameter}
 
     </select>
 
