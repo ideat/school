@@ -31,6 +31,9 @@
         select p.student_id, p.payment_date, p.payment_type
         , p.full_name_student, p.invoice_number,  sum(p.payment_mount) as payment_mount
         from payments p
+        inner join student s on (s.student_id = p.student_id)
+        inner join class_period cp on (s.class_period_id = cp.class_period_id)
+        where cp.state = 'ACTIVO'
         group by 1,2,3,4,5
         order by student_id, payment_date
     </select>
@@ -58,6 +61,13 @@
         select count(*)
         from payments
         where payment_period = #{paymentPeriod}
+
+    </select>
+
+    <select id="countPaymentsDate" resultType="int" parameterType="map">
+        select count(*)
+        from payments
+        where payment_date between #{paymentDateInit} and #{paymentDateEnd}
 
     </select>
 

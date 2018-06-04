@@ -105,4 +105,14 @@ public class PaymentsService {
             sqlSession.close();
         }
     }
+
+    public int countPaymentsDate(Date paymentDateInit, Date paymentDateEnd){
+        SqlSession sqlSession = MyBatisSqlSessionFactory.getSqlSession("development");
+        try{
+            PaymentsMapper paymentsMapper = sqlSession.getMapper(PaymentsMapper.class);
+            return paymentsMapper.countPaymentsDate(paymentDateInit, paymentDateEnd);
+        }finally {
+            sqlSession.close();
+        }
+    }
 }

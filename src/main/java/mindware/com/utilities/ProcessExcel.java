@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -49,7 +50,17 @@ public class ProcessExcel {
                                 periodFile = cell.getStringCellValue().substring(4, 14) + " - "
                                         + cell.getStringCellValue().substring(18, 28);
                                 int nroPayments = paymentsService.countPaymentsPeriod(periodFile);
-                                if (nroPayments>0) period = false;
+                                if (nroPayments>0) {
+                                    return false;
+                                }
+                                else{
+                                    Util util = new Util();
+                                    Date dateInit = util.stringToDate(cell.getStringCellValue().substring(4, 14),"dd/MM/yyyy");
+                                    Date dateEnd = util.stringToDate(cell.getStringCellValue().substring(18, 28),"dd/MM/yyyy");
+                                    nroPayments = paymentsService.countPaymentsDate(dateInit,dateEnd);
+                                    if (nroPayments>0) return false;
+
+                                }
 
                             }
                     }

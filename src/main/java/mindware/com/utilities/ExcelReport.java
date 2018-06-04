@@ -95,7 +95,7 @@ public class ExcelReport {
             //Write the Excel file
             FileOutputStream fileOut = null;
             fileOut = new FileOutputStream( this.getClass().getClassLoader().getResource("/template/").
-                    getPath()+"extract_"+detailLatePaymentList.get(1).getStudentId().toString()+".xlsx" );
+                    getPath().replaceAll("%20"," ")+"extract_"+detailLatePaymentList.get(1).getStudentId().toString()+".xlsx");
             wb.write(fileOut);
 
             fileOut.close();

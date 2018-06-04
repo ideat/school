@@ -41,7 +41,7 @@
         where <![CDATA[
           p.payment_date <= #{cutoffDate}
         ]]>
-        and p.payment_concept in ('PENSIONES','MENSUALIDAD')
+        and p.payment_concept in ('PENSIONES','MENSUALIDAD','COMPUTACION')
         group by 1
         ) as sp  on (s.student_id = sp.student_id)
         WHERE s.retirement_date is null

@@ -21,6 +21,9 @@ public class PaymentPrintForm extends CustomComponent implements View {
     private Grid<Payments> gridPayment;
     private Button btnPrintIvoice;
     private GridCellFilter<Payments> filterPayments;
+    private DateField dfDateInit;
+    private DateField dfDateEnd;
+    private Button btnSearch;
 
     public PaymentPrintForm(){
         setCompositionRoot(buildGridMaintLayout());
@@ -36,7 +39,7 @@ public class PaymentPrintForm extends CustomComponent implements View {
         gridPayment.setItems(paymentsList);
         gridPayment.addColumn(Payments::getStudentId).setCaption("Codigo").setId("studentId").setWidth(100);
         gridPayment.addColumn(Payments::getFullNameStudent).setCaption("Nombre completo").setId("fullNameStudent");
-        gridPayment.addColumn(Payments::getPaymentType).setCaption("Tipo pago").setId("paymentType").setWidth(250);
+        gridPayment.addColumn(Payments::getPaymentType).setCaption("Tipo pago").setId("paymentType").setWidth(200);
         gridPayment.addColumn(Payments::getPaymentDate).setCaption("Fecha").setId("paymentDate").setWidth(150)
                 .setRenderer(new DateRenderer(("%1$td-%1$tm-%1$tY")));
         gridPayment.addColumn(Payments::getInvoiceNumber).setCaption("Factura").setId("invoiceNumber").setWidth(130);
@@ -55,7 +58,6 @@ public class PaymentPrintForm extends CustomComponent implements View {
                 parameter[2] = new Util().dateToString(payments.getPaymentDate());
 
                 new ReportUtility().printReport(parameter,"rptpayments_cash.prpt","payment");
-
             });
 
             return button;

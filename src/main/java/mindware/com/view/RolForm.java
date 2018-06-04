@@ -225,13 +225,13 @@ public class RolForm extends CustomComponent implements View {
         btnSaveRol.setStyleName(ValoTheme.BUTTON_PRIMARY);
         btnSaveRol.setIcon(VaadinIcons.DATABASE);
         horizontalLayout.addComponent(btnSaveRol);
-
+        horizontalLayout.setComponentAlignment(btnSaveRol,Alignment.BOTTOM_LEFT);
 
         btnNewRol = new Button("Nuevo");
         btnNewRol.setStyleName(ValoTheme.BUTTON_FRIENDLY);
         btnNewRol.setIcon(VaadinIcons.PLUS);
         horizontalLayout.addComponent(btnNewRol);
-
+        horizontalLayout.setComponentAlignment(btnNewRol,Alignment.BOTTOM_LEFT);
 
         return horizontalLayout;
     }

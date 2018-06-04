@@ -20,6 +20,7 @@ public class Student {
     private String courseLevel;
     private String turn;
     private ClassPeriod classPeriod;
+    private String computation;
     private TypeFee typeFee;
     private List<PaymentPlan> paymentPlanList;
     private List<Payments> paymentsList;
@@ -175,5 +176,13 @@ public class Student {
 
     public void setClassRoom(String classRoom) {
         this.classRoom = classRoom;
+    }
+
+    public String getComputation() {
+        return computation;
+    }
+
+    public void setComputation(String computation) {
+        this.computation = computation;
     }
 }

@@ -50,6 +50,7 @@ public class StudentForm extends CustomComponent implements View {
     private TextField txtAddressParent;
     private DateField dfBornDateParent;
     private ComboBox cmbTypeRelationShip;
+    private ComboBox cmbClassRoom;
     private TabSheet mainTabSheet;
     private Button btnSaveStudent;
     private Button btnNewStudent;
@@ -59,6 +60,8 @@ public class StudentForm extends CustomComponent implements View {
     private List<Parents> parentsList;
     private GridCellFilter<Student> filterStudent;
     private String yearGlobal;
+    private ComboBox cmbComputation;
+
 
     public StudentForm(){
         Panel panelMain = new Panel();
@@ -83,8 +86,7 @@ public class StudentForm extends CustomComponent implements View {
         btnSaveStudent.addClickListener(clickEvent -> {
            try{
                saveStudent();
-               clearFieldsStudent();
-               clearFieldsParent();
+
            }catch (Exception e){
                Notification.show("Error",
                        " Al registrar los datos " + e.getMessage(),
@@ -128,6 +130,10 @@ public class StudentForm extends CustomComponent implements View {
             txtParentId.clear();
 
         });
+        btnNewStudent.addClickListener(clickEvent -> {
+            clearFieldsStudent();
+            clearFieldsParent();
+        });
     }
 
     private void fillCourseLevel(){
@@ -153,6 +159,8 @@ public class StudentForm extends CustomComponent implements View {
         dfBornDate.clear();
         cmbCourseLevel.clear();
         cmbTurn.clear();
+        cmbClassRoom.clear();
+        cmbComputation.clear();
     }
 
     private void clearFieldsParent(){
@@ -165,6 +173,7 @@ public class StudentForm extends CustomComponent implements View {
         txtAddressParent.clear();
         dfBornDateParent.clear();
         cmbTypeRelationShip.clear();
+
     }
 
     private void fillParentSelected(Parents parents){
@@ -193,6 +202,8 @@ public class StudentForm extends CustomComponent implements View {
         cmbClassPeriod.setValue(student.getClassPeriod());
         cmbTypeFee.setValue(student.getTypeFee());
         cmbTurn.setValue(student.getTurn());
+        cmbClassRoom.setValue(student.getClassRoom());
+        cmbComputation.setValue(student.getComputation());
 
     }
 
@@ -219,9 +230,11 @@ public class StudentForm extends CustomComponent implements View {
         this.filterStudent.setTextFilter("nameStudent", true, false);
         this.filterStudent.setTextFilter("lastNameStudent", true, false);
         this.filterStudent.setTextFilter("courseLevel", true, false);
+        this.filterStudent.setTextFilter("classroom", true, false);
         this.filterStudent.setNumberFilter("studentId", Integer.class ,"ID invalido","","");
         this.filterStudent.setNumberFilter("typeFeeId",Integer.class );
         this.filterStudent.setComboBoxFilter("turn", String.class , Arrays.asList("MAÑANA", "TARDE", "NOCHE"));
+        this.filterStudent.setComboBoxFilter("computation",String.class,Arrays.asList("SI", "NO"));
 
 //        ComboBox countryCombo = this.filterStudent.setComboBoxFilter("typeFeeId", typeFeeList);
     }
@@ -252,6 +265,8 @@ public class StudentForm extends CustomComponent implements View {
         gridStudent.addColumn(Student::getClassPeriodId).setCaption("Gestión").setId("classPeriodId");
         gridStudent.addColumn(Student::getTypeFeeId).setCaption("Tipo cuota").setId("typeFeeId").setWidth(130);
         gridStudent.addColumn(Student->Student.getTypeFee().getNameFee()).setCaption("Tipo cuota").setId("typeFee");
+        gridStudent.addColumn(Student::getClassRoom).setCaption("Curso").setId("classroom");
+        gridStudent.addColumn(Student::getComputation).setCaption("Computacion").setId("computation");
 
     }
 
@@ -304,6 +319,8 @@ public class StudentForm extends CustomComponent implements View {
                     Notification.show("Estudiante",
                             " Se registraron los datos ",
                             Notification.Type.HUMANIZED_MESSAGE);
+                    clearFieldsStudent();
+                    clearFieldsParent();
                 }
             }else {
 
@@ -345,6 +362,8 @@ public class StudentForm extends CustomComponent implements View {
         student.setClassPeriodId(cmbClassPeriod.getValue().getClassPeriodId());
         student.setTypeFeeId(cmbTypeFee.getValue().getTypeFeeId());
         student.setTurn(cmbTurn.getValue().toString());
+        student.setClassRoom(cmbClassRoom.getValue().toString());
+        student.setComputation(cmbComputation.getValue().toString());
 
         return student;
     }
@@ -364,6 +383,8 @@ public class StudentForm extends CustomComponent implements View {
         if (dfBornDate.isEmpty()) return false;
         if (cmbCourseLevel.isEmpty()) return false;
         if (cmbTurn.isEmpty()) return false;
+        if (cmbClassRoom.isEmpty()) return false;
+        if (cmbComputation.isEmpty()) return false;
 
         return true;
     }
@@ -385,12 +406,24 @@ public class StudentForm extends CustomComponent implements View {
     private void fillCombos(){
         ClassPeriodService classPeriodService = new ClassPeriodService();
         List<ClassPeriod> classPeriodList = classPeriodService.findClassPeriodByState("ACTIVO");
+        ParameterService parameterService = new ParameterService();
+
         cmbClassPeriod.setItems(classPeriodList);
         cmbClassPeriod.setItemCaptionGenerator(ClassPeriod::getYear);
         String year = classPeriodList.get(0).getYear();
 
         cmbTypeFee.setItems(new TypeFeeService().findTypeFeeByClassPeriodYear(year));
         cmbTypeFee.setItemCaptionGenerator(TypeFee::getNameFee);
+
+        List<Parameter> parameterList = parameterService.findParameterByType("CURSOS");
+        List<String> classRoomList = new ArrayList<>();
+        for(Parameter parameter:parameterList){
+            classRoomList.add(parameter.getValueParameter());
+        }
+        cmbClassRoom.setItems(classRoomList);
+
+
+
     }
 
     private TabSheet buildMainTabSheet(){
@@ -465,6 +498,17 @@ public class StudentForm extends CustomComponent implements View {
         cmbTurn.setItems("MAÑANA","TARDE","NOCHE");
         gridMainLayoutStudent.addComponent(cmbTurn,3,2);
 
+        cmbClassRoom = new ComboBox("Curso");
+        cmbClassRoom.setStyleName(ValoTheme.COMBOBOX_TINY);
+        cmbClassRoom.setEmptySelectionAllowed(false);
+        gridMainLayoutStudent.addComponent(cmbClassRoom,0,3);
+
+        cmbComputation = new ComboBox("Computacion");
+        cmbComputation.setStyleName(ValoTheme.COMBOBOX_TINY);
+        cmbComputation.setEmptySelectionAllowed(false);
+        cmbComputation.setItems("SI","NO");
+        gridMainLayoutStudent.addComponent(cmbComputation,1,3);
+
         btnSaveStudent = new Button("Guardar");
         btnSaveStudent.setStyleName(ValoTheme.BUTTON_PRIMARY);
         btnSaveStudent.setIcon(VaadinIcons.DATABASE);
@@ -479,7 +523,7 @@ public class StudentForm extends CustomComponent implements View {
         gridMainLayoutStudent.addComponent(btnNewStudent,4,1);
         gridMainLayoutStudent.setComponentAlignment(btnNewStudent,Alignment.BOTTOM_LEFT);
 
-        gridMainLayoutStudent.addComponent(buildPanelGridStudent(),0,3,5,4);
+        gridMainLayoutStudent.addComponent(buildPanelGridStudent(),0,4,5,4);
 
         return gridMainLayoutStudent;
     }
@@ -487,12 +531,12 @@ public class StudentForm extends CustomComponent implements View {
     private Panel buildPanelGridStudent(){
         Panel panelGridStudent = new Panel();
         panelGridStudent.setStyleName(ValoTheme.PANEL_WELL);
-        panelGridStudent.setHeight("320px");
+        panelGridStudent.setHeight("270px");
 //        panelGridStudent.setSizeFull();
         gridStudent = new Grid<>(Student.class);
         gridStudent.setStyleName(ValoTheme.TABLE_COMPACT);
         gridStudent.setWidth("100%");
-        gridStudent.setHeight("320px");
+        gridStudent.setHeight("270px");
         panelGridStudent.setContent(gridStudent);
         return panelGridStudent;
     }

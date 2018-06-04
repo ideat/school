@@ -61,8 +61,8 @@ public class LoginForm extends CustomComponent implements View {
 
         private void logeo() {
             if (validateCredentials(txtLogin.getValue().toString(), txtPassword.getValue().toString())) {
-//                ((MyUI) UI.getCurrent()).callMenu(user.getLogin(),user.getUserId(),user.getRolId());
-                ((MyUI) UI.getCurrent()).callMenu("admin",0,0);
+                ((MyUI) UI.getCurrent()).callMenu(user.getLogin(),user.getUserId(),user.getRolId());
+//                ((MyUI) UI.getCurrent()).callMenu("admin",0,0);
             } else {
                 lblMensaje.setVisible(true);
                 lblMensaje.setValue("Credenciales invalidas");
@@ -73,16 +73,16 @@ public class LoginForm extends CustomComponent implements View {
             UserService userService = new UserService();
             user = userService.findUserByLogin(login);
             if (user==null) {
-                return true; //false
+                return false;
             } else {
                 String encripted = new Encript().encriptString(password);
                 if (user.getState().equals("BAJA"))
-                    return true; //false
+                    return false;
                 else {
                     if (user.getPassword().equals(encripted)) {
                         return true;
                     } else {
-                        return true; //false
+                        return false;
                     }
                 }
             }

@@ -33,7 +33,6 @@ import mindware.com.view.*;
 import mindware.com.view.LoginForm;
 
 import javax.servlet.annotation.WebServlet;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -78,7 +77,7 @@ public class MyUI extends UI  implements ClientConnector.DetachListener {
                 .build();
 
         UI.getCurrent().getNavigator().addView(UserForm.class.getSimpleName(), UserForm.class);
-//        UI.getCurrent().getNavigator().addView(UserPasswordForm.class.getSimpleName(), new UserPasswordForm(userId));
+        UI.getCurrent().getNavigator().addView(UserPasswordForm.class.getSimpleName(), new UserPasswordForm(userId));
         UI.getCurrent().getNavigator().addView(ClassPeriodForm.class.getSimpleName(), new ClassPeriodForm());
         UI.getCurrent().getNavigator().addView(ParameterForm.class.getSimpleName(), ParameterForm.class);
         UI.getCurrent().getNavigator().addView(PaymentFeeForm.class.getSimpleName(), PaymentFeeForm.class);
@@ -86,10 +85,12 @@ public class MyUI extends UI  implements ClientConnector.DetachListener {
         UI.getCurrent().getNavigator().addView(StudentForm.class.getSimpleName(), StudentForm.class);
         UI.getCurrent().getNavigator().addView(TypeFeeForm.class.getSimpleName(), TypeFeeForm.class);
         UI.getCurrent().getNavigator().addView(UserForm.class.getSimpleName(), UserForm.class);
+
         UI.getCurrent().getNavigator().addView(RolForm.class.getSimpleName(), RolForm.class);
         UI.getCurrent().getNavigator().addView(PaymentPlanForm.class.getSimpleName(), PaymentPlanForm.class);
         UI.getCurrent().getNavigator().addView(PaymentEditForm.class.getSimpleName(), PaymentEditForm.class);
         UI.getCurrent().getNavigator().addView(PaymentCashForm.class.getSimpleName(), PaymentCashForm.class);
+        UI.getCurrent().getNavigator().addView(ReportForm.class.getSimpleName(), ReportForm.class);
 //    	UI.getCurrent().getNavigator().addView(ThemeBuilderPage.class.getSimpleName(), ThemeBuilderPage.class);
         UI.getCurrent().getNavigator().addView(SettingsPage.class.getSimpleName(), SettingsPage.class);
         UI.getCurrent().getNavigator().addView(LatePaymentForm.class.getSimpleName(), LatePaymentForm.class);
@@ -177,18 +178,18 @@ public class MyUI extends UI  implements ClientConnector.DetachListener {
     private void buildLeftMenu(HybridMenu hybridMenu,  Integer rolId) {
         RolService rolService = new RolService();
         Rol rol = rolService.findAllRolMenuOptionByRolId(rolId);
-        List<MenuOption> menuOptionList = new ArrayList<>(); // rol.getMenuOption();
-        String[] listOptions = new String[1]; //new String[menuOptionList.size()];
+        List<MenuOption> menuOptionList =  rol.getMenuOption(); //new ArrayList<>();
+        String[] listOptions = new String[menuOptionList.size()]; //new String[1];
         int i=0;
         for(MenuOption menuOption:menuOptionList){
             listOptions[i] = menuOption.getOptionId().toString();
             i+=1;
         }
-        listOptions[0] = "0";
+//        listOptions[0] = "0";
 
 
 
-        if (Arrays.asList(listOptions).contains("0")) {
+        if (Arrays.asList(listOptions).contains("1")) {
             MenuButton importDataButton = LeftMenuButtonBuilder.get()
                     .withCaption("Gestión periodos")
                     .withIcon(VaadinIcons.CALENDAR)
@@ -197,7 +198,7 @@ public class MyUI extends UI  implements ClientConnector.DetachListener {
 
             hybridMenu.addLeftMenuButton(importDataButton);
         }
-        if (Arrays.asList(listOptions).contains("0")) {
+        if (Arrays.asList(listOptions).contains("2")) {
             MenuButton registerDataButton = LeftMenuButtonBuilder.get()
                     .withCaption("Registrar/Editar Alumnos")
                     .withIcon(VaadinIcons.CALENDAR_USER)
@@ -207,48 +208,48 @@ public class MyUI extends UI  implements ClientConnector.DetachListener {
             hybridMenu.addLeftMenuButton(registerDataButton);
         }
 
-        if (Arrays.asList(listOptions).contains("0") || Arrays.asList(listOptions).contains("0") ) {
+//        if (Arrays.asList(listOptions).contains("0") || Arrays.asList(listOptions).contains("0") ) {
             MenuSubMenu paymentList = LeftMenuSubMenuBuilder.get()
                     .setCaption("Pagos")
                     .setIcon(VaadinIcons.CASH)
 //				.setConfig(hybridMenu.getConfig())
                     .build(hybridMenu);
-            if (Arrays.asList(listOptions).contains("0")) {
+            if (Arrays.asList(listOptions).contains("3")) {
                 paymentList.addLeftMenuButton(LeftMenuButtonBuilder.get()
                         .withCaption("Importar pagos")
                         .withIcon(VaadinIcons.MONEY_DEPOSIT)
                         .withNavigateTo(PaymentFeeForm.class)
                         .build());
             }
-            if (Arrays.asList(listOptions).contains("0")) {
+            if (Arrays.asList(listOptions).contains("4")) {
                 paymentList.addLeftMenuButton(LeftMenuButtonBuilder.get()
                         .withCaption("Pagos por caja")
                         .withIcon(VaadinIcons.MONEY_EXCHANGE)
                         .withNavigateTo(PaymentCashForm.class)
                         .build());
             }
-            if (Arrays.asList(listOptions).contains("0")) {
+            if (Arrays.asList(listOptions).contains("5")) {
                 paymentList.addLeftMenuButton(LeftMenuButtonBuilder.get()
                         .withCaption("Crear plan de pagos")
                         .withIcon(VaadinIcons.MONEY_DEPOSIT)
                         .withNavigateTo(PaymentPlanForm.class)
                         .build());
             }
-            if (Arrays.asList(listOptions).contains("0")) {
+            if (Arrays.asList(listOptions).contains("6")) {
                 paymentList.addLeftMenuButton(LeftMenuButtonBuilder.get()
                         .withCaption("Mora en pagos")
                         .withIcon(VaadinIcons.MONEY_WITHDRAW)
                         .withNavigateTo(LatePaymentForm.class)
                         .build());
             }
-            if (Arrays.asList(listOptions).contains("0")) {
+            if (Arrays.asList(listOptions).contains("7")) {
                 paymentList.addLeftMenuButton(LeftMenuButtonBuilder.get()
                         .withCaption("Editar detalle pagos")
                         .withIcon(VaadinIcons.EDIT)
                         .withNavigateTo(PaymentEditForm.class)
                         .build());
             }
-            if (Arrays.asList(listOptions).contains("0")) {
+            if (Arrays.asList(listOptions).contains("12")) {
                 paymentList.addLeftMenuButton(LeftMenuButtonBuilder.get()
                         .withCaption("Reimprimir comprobantes")
                         .withIcon(VaadinIcons.PRINT)
@@ -257,8 +258,8 @@ public class MyUI extends UI  implements ClientConnector.DetachListener {
             }
 
 
-        }
-        if (Arrays.asList(listOptions).contains("0")) {
+//        }
+        if (Arrays.asList(listOptions).contains("8")) {
             MenuButton TypeFeeButton = LeftMenuButtonBuilder.get()
                     .withCaption("Tipos de cuotas")
                     .withIcon(VaadinIcons.PALETE)
@@ -266,7 +267,18 @@ public class MyUI extends UI  implements ClientConnector.DetachListener {
                     .build();
             hybridMenu.addLeftMenuButton(TypeFeeButton);
         }
-        if (Arrays.asList(listOptions).contains("0")) {
+
+        if (Arrays.asList(listOptions).contains("13")) {
+            MenuButton ReportButton = LeftMenuButtonBuilder.get()
+                    .withCaption("Reportes")
+                    .withIcon(VaadinIcons.PRINT)
+                    .withNavigateTo(ReportForm.class)
+                    .build();
+            hybridMenu.addLeftMenuButton(ReportButton);
+        }
+
+
+        if (Arrays.asList(listOptions).contains("9")) {
             MenuButton ParameterButton = LeftMenuButtonBuilder.get()
                     .withCaption("Parametros")
                     .withIcon(VaadinIcons.PACKAGE)
@@ -274,7 +286,7 @@ public class MyUI extends UI  implements ClientConnector.DetachListener {
                     .build();
             hybridMenu.addLeftMenuButton(ParameterButton);
         }
-        if (Arrays.asList(listOptions).contains("0")) {
+        if (Arrays.asList(listOptions).contains("10")) {
             MenuButton UserButton = LeftMenuButtonBuilder.get()
                     .withCaption("Usuarios")
                     .withIcon(VaadinIcons.USERS)
@@ -282,7 +294,7 @@ public class MyUI extends UI  implements ClientConnector.DetachListener {
                     .build();
             hybridMenu.addLeftMenuButton(UserButton);
         }
-        if (Arrays.asList(listOptions).contains("0")) {
+        if (Arrays.asList(listOptions).contains("11")) {
             MenuButton RolButton = LeftMenuButtonBuilder.get()
                     .withCaption("Roles")
                     .withIcon(VaadinIcons.FILE_CODE)
@@ -291,7 +303,7 @@ public class MyUI extends UI  implements ClientConnector.DetachListener {
             hybridMenu.addLeftMenuButton(RolButton);
         }
 
-        if (Arrays.asList(listOptions).contains("0")) {
+//        if (Arrays.asList(listOptions).contains("0")) {
             MenuSubMenu demoSettings = LeftMenuSubMenuBuilder.get()
                     .setCaption("Preferencia")
                     .setIcon(VaadinIcons.COGS)
@@ -321,7 +333,7 @@ public class MyUI extends UI  implements ClientConnector.DetachListener {
                     .withIcon(VaadinIcons.EXPAND_SQUARE)
                     .withClickListener(e -> hybridMenu.setLeftMenuMinimal(!hybridMenu.isLeftMenuMinimal()))
                     .build(demoSettings);
-        }
+//        }
 
 
         MenuButton ExitButton = LeftMenuButtonBuilder.get()

@@ -21,6 +21,7 @@
         <result property="classRoom" column="classroom"/>
         <result property="courseLevel" column="course_level"/>
         <result property="turn" column="turn"/>
+        <result property="computation" column="computation"/>
         <association property="typeFee"  column="type_fee_id" javaType="typefee" resultMap="TypeFeeResult" />
         <association property="classPeriod"  column="class_period_id" javaType="classperiod" resultMap="ClassPeriodResult" />
         <collection property="paymentPlanList" column="student_id" ofType="PaymentPlan" resultMap="PaymentPlanResult"/>
@@ -112,7 +113,8 @@
         retirement_date,
         classroom,
         course_level,
-        turn)
+        turn,
+        computation)
         values (
         #{studentId},
         #{classPeriodId},
@@ -128,7 +130,8 @@
         #{retirementDate},
         #{classRoom},
         #{courseLevel},
-        #{turn})
+        #{turn},
+        #{computation})
     </insert>
 
     <update id="updateStudent" parameterType="student">
@@ -145,7 +148,8 @@
         parents = #{parents}::json,
         classroom = #{classRoom},
         course_level = #{courseLevel},
-        turn = #{turn}
+        turn = #{turn},
+        computation = #{computation}
         where student_id = #{studentId}
 
     </update>

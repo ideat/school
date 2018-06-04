@@ -28,10 +28,25 @@ public class ReportUtility {
                 parameters.put("invoiceNumber",param[1]);
                 parameters.put("paymentDate", new Util().stringToDate(param[2],"dd-MM-yyyy"));
                 parameters.put("path_logo", urlLogo.getPath() + separador + "logo.png");
+            }else if (nameReport.equals("rptpayments_bank.prpt")){
+                parameters.put("dateInit", new Util().stringToDate(param[0],"dd-MM-yyyy"));
+                parameters.put("dateEnd", new Util().stringToDate(param[1],"dd-MM-yyyy"));
+                parameters.put("path_logo", urlLogo.getPath() + separador + "logo.png");
+            }else if (nameReport.equals("rptlatepayment.prpt")){
+                parameters.put("date_cutoff", new Util().stringToDate(param[0],"dd-MM-yyyy"));
+                parameters.put("path_logo", urlLogo.getPath() + separador + "logo.png");
+            }else if (nameReport.equals("rptregistered_students.prpt")){
+                parameters.put("path_logo", urlLogo.getPath() + separador + "logo.png");
+            }else if (nameReport.equals("rptpayments_cash_list.prpt")){
+                parameters.put("dateInit", new Util().stringToDate(param[0],"dd-MM-yyyy"));
+                parameters.put("dateEnd", new Util().stringToDate(param[1],"dd-MM-yyyy"));
+                parameters.put("path_logo", urlLogo.getPath() + separador + "logo.png");
+            }else if (nameReport.equals("rptstudents_typefee.prpt")){
+                parameters.put("path_logo", urlLogo.getPath() + separador + "logo.png");
             }
 
             byte[] report = generarReporte.generateReport(byteFile,parameters);
-            String fileName=System.getProperty("java.io.tmpdir") + separador + nameOutPut+String.valueOf(param[0])+".pdf";
+            String fileName=System.getProperty("java.io.tmpdir") + separador + nameOutPut+String.valueOf(param[0])+".pdf".replaceAll("%20"," ");
             OutputStream out = new FileOutputStream(fileName);
             out.write(report);
             out.flush();
@@ -56,6 +71,10 @@ public class ReportUtility {
         window.setModal(true);
 
         PdfViewer c = new PdfViewer(new File(fileName));
+        c.addPageChangeListener(integer -> {
+
+            c.setPage(integer);
+        });
         c.setSizeFull();
 
         window.setContent(c);

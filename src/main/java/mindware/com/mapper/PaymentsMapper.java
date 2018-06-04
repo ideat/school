@@ -17,4 +17,6 @@ public interface PaymentsMapper {
                                                     @Param("paymentDate") Date paymentDate);
     List<Payments> findPaymentsGroupedByTypeDateStudent();
     int countPaymentsPeriod(@Param("paymentPeriod") String paymentPeriod);
+    int countPaymentsDate(@Param("paymentDateInit") Date paymentDateInit,
+                          @Param("paymentDateEnd") Date paymentDateEnd);
 }

@@ -21,17 +21,21 @@
     </resultMap>
 
     <select id="findDetailLatePaymentByStudentId" resultMap="DetailLatePaymentResult" parameterType="int">
-        select p.payment_id, s.student_id, (s.name_student || ' '|| s.last_name_student) as full_name_student, s.course_level
+            select p.payment_id, s.student_id, (s.name_student || ' '|| s.last_name_student) as full_name_student, s.course_level
         ,p.payment_date, p.invoice_number, p.payment_concept, p.description, p.payment_mount,
         (select sum(payment_plan_amount)
         from payment_plan
         where payment_plan.student_id = #{studentId}
         ) as total_payment,
-        cast ((select value_parameter
-        from parameter
-        where type_parameter = 'COMPUTACION'
-        and state = 'ACTIVO'
-        ) as decimal) as payment_computation
+        case
+          when s.computation = 'SI' then
+            cast ((select value_parameter
+            from parameter
+            where type_parameter = 'COMPUTACION'
+            and state = 'ACTIVO'
+            ) as decimal)
+          when s.computation = 'NO' then 0.0
+        end as payment_computation
         from student s
         left join payments p on s.student_id = p.student_id
         inner join class_period c on c.class_period_id = s.class_period_id

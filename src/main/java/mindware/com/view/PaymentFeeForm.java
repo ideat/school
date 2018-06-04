@@ -32,7 +32,14 @@ public class PaymentFeeForm extends CustomComponent implements View {
 
     private void postBuild(){
         btnImportData.addClickListener(clickEvent -> {
-           insertPayments();
+           if (!paymentsList.isEmpty())
+               insertPayments();
+           else
+               Notification.show("PAGOS",
+                       "Cargue los datos a importar ",
+                       Notification.Type.WARNING_MESSAGE);
+
+
         });
     }
 
@@ -43,7 +50,8 @@ public class PaymentFeeForm extends CustomComponent implements View {
             Notification.show("PAGOS",
                     "Pagos importados correctamente: ",
                     Notification.Type.HUMANIZED_MESSAGE);
-            gridPaymentFee = null;
+            paymentsList.removeAll(paymentsList);
+            gridPaymentFee.getDataProvider().refreshAll();
 
         }catch (Exception e){
             Notification.show("ERROR",
@@ -73,7 +81,7 @@ public class PaymentFeeForm extends CustomComponent implements View {
             fillGridPayments(paymentsList);
         }else {
             Notification.show("ERROR",
-                    "Periodo de pagos ya fue importado, seleccione otro archivo",
+                    "Datos en el periodo de pagos ya fue importado, seleccione otro archivo",
                     Notification.Type.ERROR_MESSAGE);
         }
 
