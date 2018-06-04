@@ -131,7 +131,7 @@ public class LatePaymentForm extends CustomComponent implements View {
                     ExcelReport excelReport = new ExcelReport();
                     excelReport.createExcel(detailLatePaymentList);
 
-                    final Resource res = new FileResource(new File(this.getClass().getClassLoader().getResource("/template/").getPath() + "extract_" + payment.getStudentId().toString() + ".xlsx"));
+                    final Resource res = new FileResource(new File(this.getClass().getClassLoader().getResource("/template/").getPath().replaceAll("%20"," ") + "extract_" + payment.getStudentId().toString() + ".xlsx"));
                     ((FileResource) res).setCacheTime(0);
 
                     FileDownloader fd = new FileDownloader(res) {

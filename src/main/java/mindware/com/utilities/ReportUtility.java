@@ -47,7 +47,7 @@ public class ReportUtility {
 
             byte[] report = generarReporte.generateReport(byteFile,parameters);
             String fileName=System.getProperty("java.io.tmpdir") + separador + nameOutPut+String.valueOf(param[0])+".pdf".replaceAll("%20"," ");
-            OutputStream out = new FileOutputStream(fileName);
+            OutputStream out = new FileOutputStream(fileName.replaceAll("%20"," "));
             out.write(report);
             out.flush();
             out.close();
