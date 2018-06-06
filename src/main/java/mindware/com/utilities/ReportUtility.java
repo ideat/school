@@ -17,11 +17,11 @@ public class ReportUtility {
         try{
             URL url = getClass().getResource("../reports/");
             String separador = System.getProperty("file.separator");
-            byte[] byteFile = Files.readAllBytes(new File(url.getPath()+ separador +nameReport).toPath());
+            byte[] byteFile = Files.readAllBytes(new File(url.getPath().replaceAll("%20"," ")+ separador +nameReport).toPath());
             GenerateReport generarReporte = new GenerateReport();
             HashMap<String,Object> parameters = new HashMap();
             URL urlLogo = getClass().getResource("../image");
-            byte[] byteFileLogo = Files.readAllBytes(new File(urlLogo.getPath()+ separador + "logo.png").toPath());
+            byte[] byteFileLogo = Files.readAllBytes(new File(urlLogo.getPath().replaceAll("%20"," ")+ separador + "logo.png").toPath());
 
             if(nameReport.equals("rptpayments_cash.prpt")){
                 parameters.put("studentId", Integer.parseInt(param[0]));

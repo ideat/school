@@ -450,10 +450,12 @@ public class StudentForm extends CustomComponent implements View {
 
         txtNameStudent = new TextField("Nombres");
         txtNameStudent.setStyleName(ValoTheme.TEXTFIELD_TINY);
+        txtNameStudent.setRequiredIndicatorVisible(true);
         gridMainLayoutStudent.addComponent(txtNameStudent,1,0);
 
         txtLastNameStudent = new TextField("Apellidos Paterno/Materno");
         txtLastNameStudent.setStyleName(ValoTheme.TEXTFIELD_TINY);
+        txtLastNameStudent.setRequiredIndicatorVisible(true);
         gridMainLayoutStudent.addComponent(txtLastNameStudent,2,0);
 
         txtAddress = new TextField("Dirección domicilio");
@@ -471,42 +473,50 @@ public class StudentForm extends CustomComponent implements View {
         dfBornDate = new DateField("Fecha nacimiento (dd-mm-yyyy)");
         dfBornDate.setStyleName(ValoTheme.DATEFIELD_TINY);
         dfBornDate.setDateFormat("dd-MM-yyyy");
+        dfBornDate.setRequiredIndicatorVisible(true);
         gridMainLayoutStudent.addComponent(dfBornDate,2,1);
 
         dfRegistrationDate = new DateField("Fecha inscripción (dd-mm-yyyy)");
         dfRegistrationDate.setStyleName(ValoTheme.DATEFIELD_TINY);
         dfRegistrationDate.setDateFormat("dd-MM-yyyy");
+        dfRegistrationDate.setRequiredIndicatorVisible(true);
         gridMainLayoutStudent.addComponent(dfRegistrationDate,3,1);
 
         cmbCourseLevel = new ComboBox("Nivel");
         cmbCourseLevel.setStyleName(ValoTheme.TEXTFIELD_TINY);
+        cmbCourseLevel.setRequiredIndicatorVisible(true);
         gridMainLayoutStudent.addComponent(cmbCourseLevel,0,2);
 
         cmbClassPeriod = new ComboBox<>("Gestión");
         cmbClassPeriod.setStyleName(ValoTheme.COMBOBOX_TINY);
         cmbClassPeriod.setEmptySelectionAllowed(false);
+        cmbClassPeriod.setRequiredIndicatorVisible(true);
         gridMainLayoutStudent.addComponent(cmbClassPeriod,1,2);
 
         cmbTypeFee = new ComboBox<>("Tipo cuota");
         cmbTypeFee.setStyleName(ValoTheme.COMBOBOX_TINY);
         cmbTypeFee.setEmptySelectionAllowed(false);
+        cmbTypeFee.setRequiredIndicatorVisible(true);
         gridMainLayoutStudent.addComponent(cmbTypeFee,2,2);
 
         cmbTurn = new ComboBox("Turno clases");
         cmbTurn.setStyleName(ValoTheme.COMBOBOX_TINY);
         cmbTurn.setEmptySelectionAllowed(false);
         cmbTurn.setItems("MAÑANA","TARDE","NOCHE");
+        cmbTurn.setRequiredIndicatorVisible(true);
         gridMainLayoutStudent.addComponent(cmbTurn,3,2);
 
         cmbClassRoom = new ComboBox("Curso");
         cmbClassRoom.setStyleName(ValoTheme.COMBOBOX_TINY);
         cmbClassRoom.setEmptySelectionAllowed(false);
+        cmbClassRoom.setRequiredIndicatorVisible(true);
         gridMainLayoutStudent.addComponent(cmbClassRoom,0,3);
 
         cmbComputation = new ComboBox("Computacion");
         cmbComputation.setStyleName(ValoTheme.COMBOBOX_TINY);
         cmbComputation.setEmptySelectionAllowed(false);
         cmbComputation.setItems("SI","NO");
+        cmbComputation.setRequiredIndicatorVisible(true);
         gridMainLayoutStudent.addComponent(cmbComputation,1,3);
 
         btnSaveStudent = new Button("Guardar");
@@ -556,10 +566,12 @@ public class StudentForm extends CustomComponent implements View {
 
         txtNameParent = new TextField("Nombres");
         txtNameParent.setStyleName(ValoTheme.TEXTFIELD_TINY);
+        txtNameParent.setRequiredIndicatorVisible(true);
         gridMainLayoutParents.addComponent(txtNameParent,1,0);
 
         txtLastNameParent = new TextField("Apellidos");
         txtLastNameParent.setStyleName(ValoTheme.TEXTFIELD_TINY);
+        txtLastNameParent.setRequiredIndicatorVisible(true);
         gridMainLayoutParents.addComponent(txtLastNameParent,2,0);
 
         txtPhoneNumberParent = new TextField("Telf. domicilio");
@@ -576,17 +588,20 @@ public class StudentForm extends CustomComponent implements View {
 
         txtAddressParent = new TextField("Dirección domicilio");
         txtAddressParent.setStyleName(ValoTheme.TEXTFIELD_TINY);
+        txtAddressParent.setRequiredIndicatorVisible(true);
         gridMainLayoutParents.addComponent(txtAddressParent,2,1);
 
         dfBornDateParent = new DateField("Fecha nacimiento (dd-mm-yyyy)");
         dfBornDateParent.setStyleName(ValoTheme.DATEFIELD_TINY);
         dfBornDateParent.setDateFormat("dd-MM-yyyy");
+        dfBornDateParent.setRequiredIndicatorVisible(true);
         gridMainLayoutParents.addComponent(dfBornDateParent,3,1);
 
         cmbTypeRelationShip = new ComboBox("Tipo relación");
         cmbTypeRelationShip.setStyleName(ValoTheme.COMBOBOX_TINY);
         cmbTypeRelationShip.setEmptySelectionAllowed(false);
         cmbTypeRelationShip.setItems("PADRE","MADRE","ABUELO/A","TIO/A","APODERADO");
+        cmbTypeRelationShip.setRequiredIndicatorVisible(true);
         gridMainLayoutParents.addComponent(cmbTypeRelationShip,4,1);
 
         btnAddParent = new Button("Agregar");
