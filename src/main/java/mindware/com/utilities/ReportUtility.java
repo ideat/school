@@ -21,28 +21,30 @@ public class ReportUtility {
             GenerateReport generarReporte = new GenerateReport();
             HashMap<String,Object> parameters = new HashMap();
             URL urlLogo = getClass().getResource("../image");
-            byte[] byteFileLogo = Files.readAllBytes(new File(urlLogo.getPath().replaceAll("%20"," ")+ separador + "logo.png").toPath());
+//            byte[] byteFileLogo = Files.readAllBytes(new File(urlLogo.getPath().replaceAll("%20"," ")+ separador + "logo.png").toPath());
+            String pathLogo = urlLogo.getPath().replaceAll("%20"," ")+ separador + "logo.png";
 
             if(nameReport.equals("rptpayments_cash.prpt")){
                 parameters.put("studentId", Integer.parseInt(param[0]));
                 parameters.put("invoiceNumber",param[1]);
                 parameters.put("paymentDate", new Util().stringToDate(param[2],"dd-MM-yyyy"));
-                parameters.put("path_logo", urlLogo.getPath() + separador + "logo.png");
+                parameters.put("path_logo", pathLogo);
             }else if (nameReport.equals("rptpayments_bank.prpt")){
                 parameters.put("dateInit", new Util().stringToDate(param[0],"dd-MM-yyyy"));
                 parameters.put("dateEnd", new Util().stringToDate(param[1],"dd-MM-yyyy"));
-                parameters.put("path_logo", urlLogo.getPath() + separador + "logo.png");
+                parameters.put("path_logo", pathLogo);
             }else if (nameReport.equals("rptlatepayment.prpt")){
                 parameters.put("date_cutoff", new Util().stringToDate(param[0],"dd-MM-yyyy"));
-                parameters.put("path_logo", urlLogo.getPath() + separador + "logo.png");
+                parameters.put("path_logo", pathLogo);
             }else if (nameReport.equals("rptregistered_students.prpt")){
-                parameters.put("path_logo", urlLogo.getPath() + separador + "logo.png");
+                parameters.put("path_logo", pathLogo);
+                parameters.put("courseLevel",param[0]);
             }else if (nameReport.equals("rptpayments_cash_list.prpt")){
                 parameters.put("dateInit", new Util().stringToDate(param[0],"dd-MM-yyyy"));
                 parameters.put("dateEnd", new Util().stringToDate(param[1],"dd-MM-yyyy"));
-                parameters.put("path_logo", urlLogo.getPath() + separador + "logo.png");
+                parameters.put("path_logo", pathLogo);
             }else if (nameReport.equals("rptstudents_typefee.prpt")){
-                parameters.put("path_logo", urlLogo.getPath() + separador + "logo.png");
+                parameters.put("path_logo", pathLogo);
             }
 
             byte[] report = generarReporte.generateReport(byteFile,parameters);

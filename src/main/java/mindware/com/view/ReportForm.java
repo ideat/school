@@ -4,8 +4,13 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import mindware.com.model.Parameter;
+import mindware.com.service.ParameterService;
 import mindware.com.utilities.ReportUtility;
 import mindware.com.utilities.Util;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReportForm extends CustomComponent implements View {
     private GridLayout gridMainLayout;
@@ -18,6 +23,7 @@ public class ReportForm extends CustomComponent implements View {
     private Button btnPrintLatePayment;
     private Panel panelRegisteredStudents;
     private Button btnPrintRegisteredStudents;
+    private ComboBox<Parameter> cmbCourseLevel;
     private Panel panelPaymentsCashList;
     private DateField dfDateInitCashList;
     private DateField dfDateEndCashList;
@@ -34,6 +40,7 @@ public class ReportForm extends CustomComponent implements View {
 
 
     private void postBuild(){
+        fillComboCourseLevel();
         btnPrinPaymentsBank.addClickListener(clickEvent -> {
             String[] parameter = new String[2];
             parameter[0] = new Util().localDateToString(dfDateInitPaymentsBank.getValue());
@@ -50,7 +57,7 @@ public class ReportForm extends CustomComponent implements View {
 
         btnPrintRegisteredStudents.addClickListener(clickEvent -> {
             String[] parameter = new String[1];
-            parameter[0] = "print";
+            parameter[0] = cmbCourseLevel.getValue().getValueParameter();
             new ReportUtility().printReport(parameter,"rptregistered_students.prpt","registered_students");
         });
 
@@ -67,6 +74,14 @@ public class ReportForm extends CustomComponent implements View {
             parameter[0] = "print";
             new ReportUtility().printReport(parameter,"rptstudents_typefee.prpt","students_typefee");
         });
+    }
+
+    private void fillComboCourseLevel(){
+        ParameterService parameterService = new ParameterService();
+        List<Parameter> parameterList = new ArrayList<>();
+        cmbCourseLevel.setItems(parameterService.findParameterByType("NIVEL_CURSOS"));
+        cmbCourseLevel.setItemCaptionGenerator(Parameter::getDescriptionParameter);
+
     }
 
     private GridLayout buildGridMainLayout(){
@@ -141,12 +156,16 @@ public class ReportForm extends CustomComponent implements View {
         horizontalLayout.setSpacing(true);
         horizontalLayout.setWidth("30%");
 
-
+        cmbCourseLevel = new ComboBox<>("Nivel de curso");
+        cmbCourseLevel.setStyleName(ValoTheme.COMBOBOX_TINY);
+        cmbCourseLevel.setEmptySelectionAllowed(false);
+        horizontalLayout.addComponent(cmbCourseLevel);
 
         btnPrintRegisteredStudents = new Button("Imprimir");
         btnPrintRegisteredStudents.setStyleName(ValoTheme.BUTTON_PRIMARY);
         btnPrintRegisteredStudents.setIcon(VaadinIcons.PRINT);
         horizontalLayout.addComponent(btnPrintRegisteredStudents);
+        horizontalLayout.setComponentAlignment(btnPrintRegisteredStudents,Alignment.BOTTOM_LEFT);
 
         panelRegisteredStudents.setContent(horizontalLayout);
         return panelRegisteredStudents;

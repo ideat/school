@@ -162,7 +162,7 @@ public class TypeFeeForm extends CustomComponent implements View {
         txtMountFee = new NumberField("Monto cuota");
         txtMountFee.setStyleName(ValoTheme.TEXTFIELD_TINY);
         txtMountFee.setDecimalPrecision(2);
-        txtMountFee.setDecimalSeparator('.');
+//        txtMountFee.setDecimalSeparator('.');
         txtMountFee.setNegativeAllowed(false);
         txtMountFee.setErrorText("Monto invalido");
         txtMountFee.setMinValue(0.0);

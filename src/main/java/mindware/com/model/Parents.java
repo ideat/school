@@ -10,6 +10,15 @@ public class Parents {
     private String addressParent;
     private String bornDateParent;
     private String typeRelationShip;
+    private String emailParent;
+
+    public String getEmailParent() {
+        return emailParent;
+    }
+
+    public void setEmailParent(String emailParent) {
+        this.emailParent = emailParent;
+    }
 
     public Integer getParentId() {
         return parentId;

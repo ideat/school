@@ -48,6 +48,7 @@ public class StudentForm extends CustomComponent implements View {
     private TextField txtCellNumberParent;
     private TextField txtPhoneOffice;
     private TextField txtAddressParent;
+    private TextField txtEmailParent;
     private DateField dfBornDateParent;
     private ComboBox cmbTypeRelationShip;
     private ComboBox cmbClassRoom;
@@ -106,7 +107,9 @@ public class StudentForm extends CustomComponent implements View {
         });
 
         gridStudent.addItemClickListener(itemClick -> {
+            clearFieldsStudent();
             fillStudentSelected(itemClick.getItem());
+            clearFieldsParent();
             fillParentList(itemClick.getItem().getParents());
         });
 
@@ -161,6 +164,7 @@ public class StudentForm extends CustomComponent implements View {
         cmbTurn.clear();
         cmbClassRoom.clear();
         cmbComputation.clear();
+        dfRetirementDate.clear();
     }
 
     private void clearFieldsParent(){
@@ -173,6 +177,8 @@ public class StudentForm extends CustomComponent implements View {
         txtAddressParent.clear();
         dfBornDateParent.clear();
         cmbTypeRelationShip.clear();
+        txtEmailParent.clear();
+
 
     }
 
@@ -185,6 +191,7 @@ public class StudentForm extends CustomComponent implements View {
         txtCellNumberParent.setValue(parents.getCellNumberParent());
         txtPhoneOffice.setValue(parents.getPhoneOffice());
         txtAddressParent.setValue(parents.getAddressParent());
+        txtEmailParent.setValue(parents.getEmailParent());
         dfBornDateParent.setValue(util.dateToLocalDate(util.stringToDate(parents.getBornDateParent(),"dd-MM-yyyy")));
         cmbTypeRelationShip.setValue(parents.getTypeRelationShip());
     }
@@ -204,6 +211,8 @@ public class StudentForm extends CustomComponent implements View {
         cmbTurn.setValue(student.getTurn());
         cmbClassRoom.setValue(student.getClassRoom());
         cmbComputation.setValue(student.getComputation());
+        if (student.getRetirementDate()!=null)
+            dfRetirementDate.setValue(new Util().dateToLocalDate(student.getRetirementDate()));
 
     }
 
@@ -281,6 +290,7 @@ public class StudentForm extends CustomComponent implements View {
         gridParents.addColumn(Parents::getPhoneOffice).setCaption("Telf. oficina");
         gridParents.addColumn(Parents::getBornDateParent).setCaption("Fecha Nac.");
         gridParents.addColumn(Parents::getTypeRelationShip).setCaption("Tipo relación");
+        gridParents.addColumn(Parents::getEmailParent).setCaption("Email");
     }
 
     private void addParents(Parents parents){
@@ -298,6 +308,7 @@ public class StudentForm extends CustomComponent implements View {
         parents.setCellNumberParent(txtCellNumberParent.getValue());
         parents.setPhoneOffice(txtPhoneOffice.getValue());
         parents.setAddressParent(txtAddressParent.getValue());
+        parents.setEmailParent(txtEmailParent.getValue());
         parents.setBornDateParent(new Util().localDateToString(dfBornDateParent.getValue()));
         parents.setTypeRelationShip(cmbTypeRelationShip.getValue().toString());
         return parents;
@@ -364,6 +375,9 @@ public class StudentForm extends CustomComponent implements View {
         student.setTurn(cmbTurn.getValue().toString());
         student.setClassRoom(cmbClassRoom.getValue().toString());
         student.setComputation(cmbComputation.getValue().toString());
+        if (!dfRetirementDate.isEmpty())
+            student.setRetirementDate(new Util().localDateToDate(dfRetirementDate.getValue()));
+        else student.setRetirementDate(null);
 
         return student;
     }
@@ -519,6 +533,12 @@ public class StudentForm extends CustomComponent implements View {
         cmbComputation.setRequiredIndicatorVisible(true);
         gridMainLayoutStudent.addComponent(cmbComputation,1,3);
 
+        dfRetirementDate = new DateField("Fecha retiro");
+        dfRetirementDate.setStyleName(ValoTheme.DATEFIELD_TINY);
+        dfRetirementDate.setDateFormat("dd-MM-yyyy");
+        gridMainLayoutStudent.addComponent(dfRetirementDate,2,3);
+
+
         btnSaveStudent = new Button("Guardar");
         btnSaveStudent.setStyleName(ValoTheme.BUTTON_PRIMARY);
         btnSaveStudent.setIcon(VaadinIcons.DATABASE);
@@ -577,6 +597,10 @@ public class StudentForm extends CustomComponent implements View {
         txtPhoneNumberParent = new TextField("Telf. domicilio");
         txtPhoneNumberParent.setStyleName(ValoTheme.TEXTFIELD_TINY);
         gridMainLayoutParents.addComponent(txtPhoneNumberParent,3,0);
+
+        txtEmailParent = new TextField("Email");
+        txtEmailParent.setStyleName(ValoTheme.TEXTFIELD_TINY);
+        gridMainLayoutParents.addComponent(txtEmailParent,4,0);
 
         txtCellNumberParent = new TextField("Celular");
         txtCellNumberParent.setStyleName(ValoTheme.TEXTFIELD_TINY);

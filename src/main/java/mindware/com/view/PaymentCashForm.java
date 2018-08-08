@@ -231,7 +231,7 @@ public class PaymentCashForm extends CustomComponent implements View {
 
         nfPaymentMount = new NumberField("Monto");
         nfPaymentMount.setStyleName(ValoTheme.TEXTFIELD_TINY);
-        nfPaymentMount.setDecimalSeparator('.');
+//        nfPaymentMount.setDecimalSeparator('.');
         nfPaymentMount.setMinValue(1);
         nfPaymentMount.setMaxValue(1000000);
         nfPaymentMount.setNegativeAllowed(false);

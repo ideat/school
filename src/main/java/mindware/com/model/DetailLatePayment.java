@@ -7,7 +7,7 @@ public class DetailLatePayment {
     private String  fullNameStudent;
     private String courseLevel;
     private Date paymentDate;
-    private Integer invoiceNumber;
+    private String invoiceNumber;
     private String description;
     private Double paymentMount;
     private Double balance;
@@ -71,11 +71,11 @@ public class DetailLatePayment {
         this.paymentDate = paymentDate;
     }
 
-    public Integer getInvoiceNumber() {
+    public String getInvoiceNumber() {
         return invoiceNumber;
     }
 
-    public void setInvoiceNumber(Integer invoiceNumber) {
+    public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
     }
 

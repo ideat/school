@@ -149,7 +149,8 @@
         classroom = #{classRoom},
         course_level = #{courseLevel},
         turn = #{turn},
-        computation = #{computation}
+        computation = #{computation},
+        retirement_date = #{retirementDate}
         where student_id = #{studentId}
 
     </update>

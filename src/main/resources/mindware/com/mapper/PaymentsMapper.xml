@@ -62,12 +62,14 @@
         from payments
         where payment_period = #{paymentPeriod}
 
+
     </select>
 
     <select id="countPaymentsDate" resultType="int" parameterType="map">
         select count(*)
         from payments
         where payment_date between #{paymentDateInit} and #{paymentDateEnd}
+        and payment_type = 'Deposito bancario'
 
     </select>
 
